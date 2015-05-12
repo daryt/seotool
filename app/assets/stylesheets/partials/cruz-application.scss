@@ -1,0 +1,198 @@
+*{
+    /*border: 1px red dotted;*/
+}
+
+.pad label{
+	color: white;
+}
+
+.pad input{
+	color: black;
+}
+
+div.landing-top-wrapper
+{
+	overflow: hidden;
+	width:100%;
+}
+
+div.landing-top-image-wrapper
+{
+	position: absolute;
+	overflow: hidden;
+	width:100%;
+	min-width:1000px;
+	min-height: 800px;
+	max-height: 800px;
+}
+
+img.landing-top-image
+{
+	width:100%;
+	position: relative;
+}
+
+div.landing-text
+{
+	z-index: 10;
+	position:relative;
+	width:100%;
+	text-align: center;
+	padding: 25px;
+}
+
+div.landing-text h1
+{
+	color:black;
+	margin-top:150px;
+	font-size: 300%;
+}
+
+div.landing-text p
+{
+	color:black;
+	font-size: 500%;
+}
+
+div.landing-text a
+{
+	color:green;
+	font-size: 300%;
+	border: 5px solid green;
+	width: 150px;
+	padding: 10px;
+	text-decoration: none;
+	-webkit-transition:color 0.5s, background-color 0.5s, -webkit-transform 0.5s;
+    transition:color 0.5s, background-color 0.5s, transform 0.5s;
+}
+
+div.landing-text a:hover {
+	color:white;
+    background-color: green;
+    -webkit-transition:color 0.5s, background-color 0.5s, -webkit-transform 0.5s;
+    transition:color 0.5s, background-color 0.5s, transform 0.5s;
+}
+
+div.career-track
+{
+	width: 90%;
+	min-height: 450px;
+	color:black;
+	border: 5px solid green;
+	background-color: white;
+	text-decoration: none;
+	-webkit-transition:color 0.5s, background-color 0.5s, -webkit-transform 0.5s;
+    transition:color 0.5s, background-color 0.5s, transform 0.5s;
+    p{
+    	padding:5px;
+    }
+}
+
+div.career-track:hover {
+	color:white;
+    background-color: green;
+    -webkit-transition:color 0.5s, background-color 0.5s, -webkit-transform 0.5s;
+    transition:color 0.5s, background-color 0.5s, transform 0.5s;
+}
+
+#error-bar{
+	background: linear-gradient(to bottom, #a90329 0%,#8f0222 44%,#6d0019 100%);
+	border: 1px solid #500000;
+	padding: 5px;
+	height: 50px;
+	width: 600px;
+}
+
+#success-bar{
+	background: linear-gradient(darkgreen, green);
+	border: 1px solid white;
+	/*border-radius: 5px;*/
+	padding: 5px;
+	/*width: 600px;*/
+}
+
+span.success-text{
+	color:white;
+	font-weight: normal;
+	font-size: 125%;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#message-bar{
+	position:absolute;
+	right:0;
+	bottom:75px;
+	height:75px;
+	left:25px
+}
+
+#bottom-bar{
+	position:absolute;
+	right:0;
+	bottom:0;
+	height:75px;
+	left:0px;
+	padding: 0px;
+}
+
+button#submit-work{
+	margin-left:25px;
+}
+
+div.columnLayout {
+	/*min-height: 800px;
+	max-height: 800px;*/
+}
+
+code {
+	font-size: 100%;
+}
+
+div.image-wrapper{
+	overflow: hidden;
+	width:100%;
+	min-width:800px;
+	min-height: 800px;
+	max-height: 800px;
+}
+
+img.stock-thumb{
+	width:100%;
+	height:200px;
+	/*min-width: 700px;*/
+	/*max-width: 100%;*/
+}
+
+img.stock-image{
+	width:100%;
+	/*min-width: 700px;*/
+	/*max-width: 100%;*/
+}
+
+.sheet-hidden{
+	display: none;
+}
+
+.no-display{
+    display: none;
+}
+
+.clear-margin {
+    margin: 0px;
+}
+.clear-margin-top{
+	margin-top: 0px;
+}
+.margin-fix{
+    margin-top: -50px;
+}
+.margin-top-buffer{
+	margin-top: 25px;
+}
+
+div.wrapper-fixed{
+    margin: 0px auto;
+    margin-top: -25px;
+    /*width: 1024px;*/
+}

@@ -1,0 +1,35 @@
+<script>
+$(document).ready(function(){
+
+	$('.achievement').fadeIn(2000);
+
+});
+</script>
+
+<div class='wrapper-row'>
+	<div class='side-wrapper'>
+		<h1 class='page-header clear-margin-top'>The First Step</h1>
+		<p>Congratulations on making it through the first compensation analysis module! We've only scratched the surface of dynamic models, and we'll come back to them later in this course.</p>
+		<p>There are six more modules in this course, each of them more in-depth and detailed than this first step. Don't attempt to do it all in one sitting, and don't rush.</p>
+		<p>Make sure you understand the concepts and retry the more difficult exercises as often as it takes to fully grasp the material.</p>
+		<p>Remember, when you've completed this course, you'll be light years ahead of the competition!</p>
+
+		<%= link_to 'Proceed to Next Module', module_url(:id => @module_id + 1), data: { no_turbolink: true } %>
+	</div>
+	<div class='main-wrapper' style='padding:0px'>
+		<div class='landing-top-image-wrapper'>
+			<%= image_tag 'main_01.jpg', :class => "stock-image" %>
+		</div>
+		<div class='landing-text achievement no-display'>
+			<h1>module complete</h1>
+			<p>next: compensation integration</p>
+			<div style='margin-top:50px'>
+				<a href='/modules/1'>Let's Go!</a>
+			</div>
+		</div>
+
+
+	</div>
+	<!-- <div class="main-wrapper">
+	</div> -->
+</div>

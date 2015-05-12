@@ -1,0 +1,4 @@
+$('#dynamic-content').hide();
+var url = "<%= j render(:partial => 'partial_' + @module_id.to_s) %>"
+$('#dynamic-content').html(url);
+$('#dynamic-content').fadeIn(1000);

@@ -1,0 +1,82 @@
+cruz notes
+
+5/8/15
+
+"Nest" - nested wish lists / gift registries / want lists? Some kind of distributed network of things where you can see what other people need? Nested bucket list?
+
+	- Person A wants item X ... and requests two nesters? Like a controlled pyramid scheme? Maybe you want to buy something, but you don't have the money. You can try to nest your request and get others to contribute to your cause.
+
+4/28/15
+
+Overview
+
+Tech
+
+- Rails framework
+	- postgreSQL
+	- puma web server?
+	- jquery/angular
+	- advantages
+		- mature
+		- gems to reduce code load
+		- good to learn for job/career purposes
+	- disadvantages
+		- does a little too much without exposing what it's doing
+		- not as efficiency with Ruby (for now)
+		- troubleshooting difficult b/c of first point
+
+- MEAN or Meteor
+	- port later if needed
+
+Schedule
+
+Major Tasks
+- Get formulas working
+- Get tabbed spreadsheets up
+- Create a way to scan/check for values in the table, and allow users to move on
+
+Minor Tasks
+- Make things look better
+- Security, preventing user access to areas
+
+- 5/7
+	- Major Priorities
+		- Tabbed spreadsheet
+		- Refresh spreadsheet
+		- Error/success messages
+	- Lesser Priorities
+		- Design/styling
+		- Copy/paste equations
+
+- 5/6
+	- PRIORITY? Tabbed spreadsheets? Maybe we don't worry about that for now ... let's get scanning and checking values working
+	- That means ... when the user attempts to hit "Submit Sheet" or whatever, we simply check the output of some cells. Make the user type in some text EXACTLY, and we check for that EXACT string. We don't care about what is in the other cells right now.
+	- If the text isn't right, we ask the user to type it in again. We also need a reset sheet button (save a copy of the scoped data and reset the scope)
+	- If it is right, we move on to the next
+
+- 5/5
+	- If there is time, look into this freaking reload problem (ask Lance)
+		- Got a dummy fix for now
+	- Don't worry too much about copy/paste formulas
+
+- 5/4
+	- Spreadsheets close to workable
+	- Need to focus and complete the cell editing and move on to tabs
+	- IDEALLY tabs finished by tomorrow night!
+	- That gives me two-ish days to get the flow working ... can be done??
+
+- 4/30
+	- Front-end in usable state
+	- Hacked together module flows
+	- Applied basic spreadsheet onto page
+
+- 4/29
+	- Clean up devise and get bootstrap working. Figure out why it doesn't look good like the example video.
+	- Leave the email confirmation and forget notices for now
+	- Once the login/logout is polished enough, do some research on postgreSQL. If easy-looking add, go ahead and try to implement
+		- Doesn't look all that bad? Not compared to puma nightmare ...
+	- Same for puma
+		- Not so easy ... looks like a couple hours+ to get everything working, min
+	- Def spend minimal time setting up postgres
+	- Set up the basic views and interface for the platform
+	- Spend some time architecting the front-end for "web excel". Figure out the best front-end between jquery and angular

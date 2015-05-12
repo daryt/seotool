@@ -1,0 +1,6 @@
+<h1 class='page-header clear-margin-top'>A Thousand Employees</h1>
+<p>That's a lot of rows.</p>
+<p>So, we could potentially use our previous solution and write an equation similar to <code>=D2*1.05</code> for all 1000 rows. But that won't be too efficient if Jimmy asks us to calculate for 1 or 7 or x percent. Imagine also if we had several columns that needed updating - do we really want to write an equation and copy it down every relevant cell each time?</p>
+<p>Let's tackle the first part of this: maintaining one 'master' input cell that will control the salary increase. In the cell below "Salary Increase %", replace the text with the percentage increase that Jimmy asked for (1.05).</p>
+<p>In the "Projected Salary" column, create an equation for each cell that will reference our new master input. Remember to use the '$' symbol to make a static reference to a cell.</p>
+<p>Finally, let's calculate the total cost of increasing all these employee salaries. Remember, it should look something like: <code>=SUM(F2:F4)</code></p>

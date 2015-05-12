@@ -1,0 +1,15 @@
+<h1>Select your industry</h1>
+
+<%= form_for(@industry) do |f| %>
+
+      <div class="form-group">
+        <%= f.select :id, Industry.all.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label" %>
+      </div>
+
+      <div class="actions">
+        <div class="col-sm-offset-2">
+          <%= f.submit "Select",class:"btn btn-primary" %>
+        </div>
+      </div>
+
+    <% end %>

@@ -1,0 +1,59 @@
+<div class='wrapper-row'>
+
+	<div class='side-wrapper'>
+		<div id='dynamic-content'>
+		    <h1 class='page-header clear-margin-top'>Compensation Model Part 3</h1>
+		    <p>Before we move on to some of the other issues with this model, let's calculate the total cost of increasing salaries 3 percent.</p>
+		    <p>In the "Cost" column, create the necessary equation that will correctly evaluate the cost of increasing each employee's salary.</p>
+		    <p>In the cell marked "(total cost)", replace the text with a formula that will total the costs for all three employees. It will look something like this:</p>
+		    <code>=SUM(F2:F4)</code>
+		</div>
+	    <%= link_to 'Previous', module_url(:id => @module_id - 1), data: { no_turbolink: true } %> | <%= link_to 'Next', module_url(:id => @module_id + 1), data: { no_turbolink: true } %>
+	</div>
+
+	<div class="main-wrapper" data-ng-controller="DemoCtrl" ng-init='swap(406)'>
+    	<!-- <button class='btn btn-primary open-file'>Open File</button> -->
+        <div id="container">
+            <div class="columnLayout">
+                <div class="rowLayout">
+                    <div class="descLayout">
+                        <div class="pad" data-jsfiddle="example">
+                        	<label>f(x)<input type="text" data-ng-model="db.items[rowIdx][colIdx]" style="width: 300px" datepicker></label>
+                            <div id="example1">
+                                <hot-table
+                                    settings="{	colHeaders: true,
+                                    			colWidths: [50, 100, 100, 100,150,100],
+	                                        	manualColumnMove: false,
+                                                manualRowMove: false,
+                                                manualColumnResize: false,
+                                                manualRowResize: false,
+										        formulas: true,
+										        contextMenu: ['row_above', 'row_below', 'remove_row'], afterChange: afterChange
+										    }"
+                                    rowHeaders="true"
+                                    minSpareRows="minSpareRows"
+                                    datarows="db.items"
+                                    height="300"
+                                    width="700">
+                                </hot-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="message-bar">
+                <div id='error-bar' class='no-display'>
+                    <span class='success-text'>Uh oh, something's not quite right with your spreadsheet!</span>
+                </div>
+            </div>
+            <div id="bottom-bar">
+                <button id='submit-work' class='btn btn-primary' ng-click='checkWork(406)'>Submit Work</button>
+                <button class='btn btn-info' id='reset-sheet' ng-click='refresh()'>Reset Sheets</button>
+                <div id='success-bar' class='no-display'>
+                    <span class='success-text'>Great job!</span>
+                    <%= link_to "Next Lesson", module_url(:id => @module_id + 1), :id=>'next-lesson', :class => "btn btn-success", data: { no_turbolink: true }%>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
