@@ -11,10 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512222952) do
+ActiveRecord::Schema.define(version: 20150512234343) do
 
   create_table "industries", force: true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "keyword_topics", force: true do |t|
+    t.integer  "topic_id"
+    t.integer  "keyword_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "keyword_topics", ["keyword_id"], name: "index_keyword_topics_on_keyword_id"
+  add_index "keyword_topics", ["topic_id"], name: "index_keyword_topics_on_topic_id"
+
+  create_table "keywords", force: true do |t|
+    t.string   "keyword"
+    t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

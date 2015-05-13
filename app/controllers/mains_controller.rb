@@ -4,9 +4,9 @@ class MainsController < ApplicationController
   	puts @industry
   end
 
-  def select
-  	puts params
-  	render :nothing => true
+  def site_map
+  	puts params[:industry][:id]
+  	@topics = Industry.find(params[:industry][:id]).topics
   end
 
 end
