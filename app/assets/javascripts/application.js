@@ -13,16 +13,6 @@
 //= require jquery
 //= require jquery.turbolinks
 //= require jquery_ujs
-//= require handsontable.full
-//= require_tree ./ruleJS
-//= require_tree ./src
-//= require ngHandsontable/angular
-//= require ngHandsontable/ngHandsontable
-//= require ngHandsontable/ngHandsontableDemo
-//= require ngHandsontable/angular-route
-//= require ngHandsontable/angular-resource
-//= require samples
 //= require bootstrap-sprockets
 //= require turbolinks
 //= require bootstrap
-//= require handson.supp
