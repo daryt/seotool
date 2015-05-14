@@ -19,14 +19,13 @@
 		            <span class="icon-bar"></span>
 		            <span class="icon-bar"></span>
 		        </button>
-		        <%= link_to "SEO Tool", '/select', class: 'navbar-brand' %>
+		        <%= link_to "SEO Tool", '/', class: 'navbar-brand' %>
 		    </div>
 
 		    <div class="collapse navbar-collapse" id="navbar-collapse-1">
 		        <ul class="nav navbar-nav navbar-right">
 		            <!-- <li><%= link_to 'Posts', '#' %></li> -->
 		            <% if current_user %>
-		            	<li><%= link_to 'Progress: ' + current_user.modules_completed.to_s + ' of 6', '/modules/'+(4+current_user.modules_completed).to_s,:style =>'color:green' %></li>
 		            	<li><%= link_to 'Logged in as ' + current_user.first_name ,edit_user_registration_path %></li>
 		                <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
 		            <% else %>

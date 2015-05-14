@@ -2,9 +2,11 @@ Rails.application.routes.draw do
 
   # resources :industries
 
-  get '/site_map' => 'mains#site_map'
+  get '/sitemap' => 'mains#sitemap'
+  post '/industries/' => 'mains#sitemap'
 
-  post '/industries/' => 'mains#site_map'
+  # get '/sitemap' => 'mains#sitemap'
+  post '/keywords/' => 'mains#keywords'
 
   get '/' => 'mains#index'
 
