@@ -1,25 +1,31 @@
-<h1>Select Page Topics</h1>
+<div class='container'>
+	<div class='row'>
 
-<%= form_tag("/keywords/", method: "post", class: "") do %>
+		<h1>Select Page Topics</h1>
 
-<div class="well" style="width:300px; padding: 8px 0;">
-    <div style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
-        <ul class="nav nav-list">
-		<% @topics.each do |topic| %>
-		<li>
-			<%= check_box_tag(topic.name,topic.id,{checked: true}) %>
-			<%= label_tag(topic.name, topic.name, class: "tree-toggler nav-header") %>
+		<%= form_tag("/keywords/", method: "post", class: "") do %>
 
-			<ul class="nav nav-list tree">
-				<% topic.keywords.each do |keyword| %>
-				<li><%= keyword.keyword %></li>
+		<div class="well" style="width:300px; padding: 8px 0;">
+		    <div style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
+		        <ul class="nav nav-list">
+				<% @topics.each do |topic| %>
+				<li>
+					<%= check_box_tag(topic.name,topic.id,{checked: true}) %>
+					<%= label_tag(topic.name, topic.name, class: "tree-toggler nav-header") %>
+
+					<ul class="nav nav-list tree">
+						<% topic.keywords.each do |keyword| %>
+						<li><%= keyword.keyword %></li>
+						<% end %>
+					</ul>
+				</li>
 				<% end %>
-			</ul>
-		</li>
-		<% end %>
-		</ul>
-	</div>
-	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
-</div>
+				</ul>
+			</div>
+			<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+		</div>
 
-<% end %>
+		<% end %>
+
+	</div>
+</div>

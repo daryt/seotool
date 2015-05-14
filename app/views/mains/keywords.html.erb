@@ -1,21 +1,27 @@
-<h1>Select Keywords Per Topic</h1>
+<div class='container'>
+	<div class='row'>
 
-<%= form_tag("/keywords/", method: "post", class: "") do %>
+		<h1>Select Keywords Per Topic</h1>
 
-	<% @topics.each do |key,val| %>
+		<%= form_tag("/keywords/", method: "post", class: "") do %>
 
-	<div>
-		<h1><%= Topic.find(val).name %></h1>
+			<% @topics.each do |key,val| %>
 
-		<% for i in 0..2 %>
-		<div class="form-group">
-			<%= select_tag(:id, options_for_select(Topic.find(val).keywords.collect {|p| [p.keyword, p.id]}, class: "col-sm-2 control-label")) %>
-		</div>
+			<div>
+				<h1><%= Topic.find(val).name %></h1>
+
+				<% for i in 0..2 %>
+				<div class="form-group">
+					<%= select_tag(:id, options_for_select(Topic.find(val).keywords.collect {|p| [p.keyword, p.id]}, class: "col-sm-2 control-label")) %>
+				</div>
+				<% end %>
+
+			</div>
+			<% end %>
+
+			<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+
 		<% end %>
 
 	</div>
-	<% end %>
-
-	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
-
-<% end %>
+</div>

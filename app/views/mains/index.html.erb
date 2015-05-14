@@ -1,15 +1,21 @@
-<h1>Select your industry</h1>
+<div class='container'>
+	<div class='row'>
 
-<%= form_for(@industry) do |f| %>
+		<h1>Select your industry</h1>
 
-  <div class="form-group">
-    <%= f.select :id, Industry.all.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label" %>
-  </div>
+		<%= form_for(@industry) do |f| %>
 
-  <div class="actions">
-    <div class="col-sm-offset-2">
-      <%= f.submit "Select",class:"btn btn-primary" %>
-    </div>
-  </div>
+		  <div class="form-group">
+		    <%= f.select :id, Industry.all.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label" %>
+		  </div>
 
-<% end %>
+		  <div class="actions">
+		    <div class="col-sm-offset-2">
+		      <%= f.submit "Select",class:"btn btn-primary" %>
+		    </div>
+		  </div>
+
+		<% end %>
+
+	</div>
+</div>
