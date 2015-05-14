@@ -1,31 +1,75 @@
 <div class='container'>
 	<div class='row'>
+		<div class ='col-md-6'>
+			<h1>Select Page Topics</h1>
 
-		<h1>Select Page Topics</h1>
+			<%= form_tag("/keywords/", method: "post", class: "") do %>
 
-		<%= form_tag("/keywords/", method: "post", class: "") do %>
+			<div class="well" style="width:300px; padding: 8px 0;">
+			    <div style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
+			        <ul class="nav nav-list">
+					<% @topics.each do |topic| %>
+					<li>
+						<%= check_box_tag(topic.name,topic.id,{checked: true}) %>
+						<%= label_tag(topic.name, topic.name, class: "tree-toggler nav-header") %>
 
-		<div class="well" style="width:300px; padding: 8px 0;">
-		    <div style="overflow-y: scroll; overflow-x: hidden; height: 500px;">
-		        <ul class="nav nav-list">
-				<% @topics.each do |topic| %>
-				<li>
-					<%= check_box_tag(topic.name,topic.id,{checked: true}) %>
-					<%= label_tag(topic.name, topic.name, class: "tree-toggler nav-header") %>
-
-					<ul class="nav nav-list tree">
-						<% topic.keywords.each do |keyword| %>
-						<li><%= keyword.keyword %></li>
-						<% end %>
+						<ul class="nav nav-list tree">
+							<% topic.keywords.each do |keyword| %>
+							<li><%= keyword.keyword %></li>
+							<% end %>
+						</ul>
+					</li>
+					<% end %>
+					<li>
+						<input id='new-topic-name' type='text'>
+						<button id='new-topic-submit'>Add Topic</button>
+					</li>
 					</ul>
-				</li>
-				<% end %>
-				</ul>
+				</div>
+				<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
 			</div>
-			<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+
+			<% end %>
 		</div>
-
-		<% end %>
-
+		<div class ='col-md-6'>
+			<div id='confirm'>
+			</div>
+		</div>
 	</div>
 </div>
+<script>
+$(document).ready(function(){
+
+	$('#new-topic-submit').click(function(){
+
+		var formData = $("#new-topic-name").val();
+		console.log(formData);
+		var html = '<h3>Add "' + formData + '" to database?</h3><button id="new-topic-confirm" value="' + formData + '">Yes</button>';
+		$('#confirm').html(html);
+		return false;
+	});
+
+});
+
+$(document).on('click','#new-topic-confirm',function(){
+
+	console.log($('#new-topic-confirm').attr('value'));
+
+	$.ajax({
+	    url : '/topics/new', //Target URL for JSON file
+	    contentType: 'application/json',
+	    method: 'POST',
+	    data: {'name':$('#new-topic-confirm').attr('value')},
+	    success : function(data){
+	        console.log(data);
+	    },
+	    error : function(xhr, status){
+	        console.log(status);
+	    }
+	});
+
+	$('#confirm').html('');
+
+	return false;
+});
+</script>

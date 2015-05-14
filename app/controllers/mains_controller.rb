@@ -1,10 +1,12 @@
 class MainsController < ApplicationController
   def index
   	@industry = Industry.new
-  	puts @industry
+  	@templates = Template.where(status: 'draft')
+  	puts @templates
   end
 
   def sitemap
+  	# create a check to see if we're starting a new template, or continuing an in-process one
   	puts params[:industry][:id]
   	@topics = Industry.find(params[:industry][:id]).topics
   end
@@ -21,6 +23,11 @@ class MainsController < ApplicationController
   	end
   	puts YAML::dump(@topics)
 
+  end
+
+  def new_topic
+  	puts params
+  	render :nothing => true
   end
 
 end

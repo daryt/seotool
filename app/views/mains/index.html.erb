@@ -5,17 +5,34 @@
 
 		<%= form_for(@industry) do |f| %>
 
-		  <div class="form-group">
-		    <%= f.select :id, Industry.all.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label" %>
-		  </div>
+		<div class="form-group">
+			<%= f.select :id, Industry.all.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label" %>
+		</div>
 
-		  <div class="actions">
-		    <div class="col-sm-offset-2">
-		      <%= f.submit "Select",class:"btn btn-primary" %>
-		    </div>
-		  </div>
+		<div class="actions">
+		  	<%= f.submit "Select",class:"btn btn-primary" %>
+		</div>
 
 		<% end %>
 
 	</div>
+
+	<div class='row'>
+
+		<h1>Select an in-process template</h1>
+
+		<%= form_tag("/templates/", method: "post", class: "") do %>
+
+		<div class="form-group">
+			<%= select_tag(:id, options_for_select(@templates.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label")) %>
+		</div>
+
+		<div class="actions">
+			<%= submit_tag("Select", class:"btn btn-primary") %>
+		</div>
+
+		<% end %>
+
+	</div>
+
 </div>

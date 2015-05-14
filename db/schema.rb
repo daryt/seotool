@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512234343) do
+ActiveRecord::Schema.define(version: 20150514174451) do
 
   create_table "industries", force: true do |t|
     t.string   "name"
@@ -34,6 +34,36 @@ ActiveRecord::Schema.define(version: 20150512234343) do
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "page_templates", force: true do |t|
+    t.integer  "template_id"
+    t.integer  "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "page_templates", ["page_id"], name: "index_page_templates_on_page_id"
+  add_index "page_templates", ["template_id"], name: "index_page_templates_on_template_id"
+
+  create_table "pages", force: true do |t|
+    t.integer  "topic_id"
+    t.integer  "k1_id"
+    t.integer  "k2_id"
+    t.integer  "k3_id"
+    t.integer  "h1_id"
+    t.integer  "h2_id"
+    t.integer  "h3_id"
+    t.integer  "meta_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "templates", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "status"
   end
 
   create_table "topics", force: true do |t|
