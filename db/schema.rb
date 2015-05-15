@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150514174451) do
+ActiveRecord::Schema.define(version: 20150514200638) do
+
+  create_table "headings", force: true do |t|
+    t.string   "heading"
+    t.integer  "keyword_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "headings", ["keyword_id"], name: "index_headings_on_keyword_id"
 
   create_table "industries", force: true do |t|
     t.string   "name"
@@ -35,6 +44,15 @@ ActiveRecord::Schema.define(version: 20150514174451) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "meta", force: true do |t|
+    t.string   "description"
+    t.integer  "topic_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "meta", ["topic_id"], name: "index_meta_on_topic_id"
 
   create_table "page_templates", force: true do |t|
     t.integer  "template_id"

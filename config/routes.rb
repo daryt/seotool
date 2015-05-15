@@ -7,8 +7,13 @@ Rails.application.routes.draw do
   # get '/sitemap' => 'mains#sitemap'
   get '/sitemap' => 'mains#sitemap'
   post '/industries/' => 'mains#sitemap'
+  get '/industries/' => 'mains#index'
 
   post '/keywords/' => 'mains#keywords'
+
+  post '/headings/' => 'mains#headings'
+
+  post '/metas/' => 'mains#metas'
 
   post '/topics/new' => 'mains#new_topic'
 

@@ -1,21 +1,18 @@
 <div class='container'>
 	<div class='row'>
 
-		<h1>Select Keywords Per Topic</h1>
+		<h1>Select Meta Description Per Topic</h1>
 
 		<%= form_tag("/headings/", method: "post", class: "") do %>
 
 			<% @topics.each do |key,val| %>
 
 			<div>
-				<h1><%= Topic.find(val).name %></h1>
+				<h1><%= Topic.find(key).name %></h1>
 
-				<% for i in 0..2 %>
 				<div class="form-group">
-					<%= select_tag(val.to_s + '_' + i.to_s + '_keyword', options_for_select(Topic.find(val).keywords.collect {|p| [p.keyword, p.id]}, class: "col-sm-2 control-label")) %>
+					<%= select_tag(key, options_for_select(Topic.find(key).metas.collect {|p| [p.description, p.id]}, class: "col-sm-2 control-label")) %>
 				</div>
-				<% end %>
-
 			</div>
 			<% end %>
 

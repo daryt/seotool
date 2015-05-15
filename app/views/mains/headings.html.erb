@@ -1,0 +1,31 @@
+<div class='container'>
+	<div class='row'>
+
+		<h1>Select Headings Per Keyword Per Topic</h1>
+
+		<%= form_tag("/metas/", method: "post", class: "") do %>
+
+			<% @view_data.each do |key,val| %>
+
+			<div>
+				<h1><%= Topic.find(key).name %></h1>
+
+				<% val.each do |key2,val2| %>
+
+					<p><%= Keyword.find(val2).keyword %></p>
+
+					<div class="form-group">
+					<%= select_tag(key, options_for_select(Keyword.find(val2).headings.collect {|p| [p.heading, p.id]}, class: "col-sm-2 control-label")) %>
+					</div>
+
+				<% end %>
+
+			</div>
+			<% end %>
+
+			<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+
+		<% end %>
+
+	</div>
+</div>

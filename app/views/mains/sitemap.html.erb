@@ -53,22 +53,27 @@ $(document).ready(function(){
 
 $(document).on('click','#new-topic-confirm',function(){
 
-	console.log($('#new-topic-confirm').attr('value'));
+	var topicData = $('#new-topic-confirm').attr('value');
+
+	console.log(topicData);
+
+	// $('#confirm').html('<img src="/images/ajax-loader.gif" alt="ajax spinner"/>');
+
+	$('#confirm').html('<%= image_tag "ajax-loader.gif" %>');
 
 	$.ajax({
 	    url : '/topics/new', //Target URL for JSON file
-	    contentType: 'application/json',
+	    // contentType: 'application/json',
 	    method: 'POST',
-	    data: {'name':$('#new-topic-confirm').attr('value')},
+	    data: {'name':topicData, 'industry_id':'<%= @industry[:id] %>'},
 	    success : function(data){
 	        console.log(data);
+	        $('#confirm').html(data.message);
 	    },
 	    error : function(xhr, status){
 	        console.log(status);
 	    }
 	});
-
-	$('#confirm').html('');
 
 	return false;
 });
