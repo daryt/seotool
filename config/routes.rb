@@ -2,7 +2,10 @@ Rails.application.routes.draw do
 
   # resources :industries
 
-  post '/templates/' => 'mains#sitemap'
+  post '/overview/' => 'mains#post_overview'
+  post '/show_overview' => 'mains#show_overview'
+
+  post '/templates/' => 'mains#new_template'
 
   # get '/sitemap' => 'mains#sitemap'
   get '/sitemap' => 'mains#sitemap'

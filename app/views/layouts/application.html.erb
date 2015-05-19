@@ -24,10 +24,17 @@
 
 		    <div class="collapse navbar-collapse" id="navbar-collapse-1">
 		        <ul class="nav navbar-nav navbar-right">
-		            <!-- <li><%= link_to 'Posts', '#' %></li> -->
+
+		        	<% if current_template %>
+			            	<li class='nav-item'>Editing template: <%= current_template.name %></li>
+			            <% else %>
+			            	<li class='nav-item'>No current template</li>
+			            <% end %>
+
 		            <% if current_user %>
 		            	<li><%= link_to 'Logged in as ' + current_user.first_name ,edit_user_registration_path %></li>
 		                <li><%= link_to 'Logout', destroy_user_session_path, method: :delete %></li>
+
 		            <% else %>
 		            	<li><%= link_to "Register", new_user_registration_path %></li>
 		                <li><%= link_to 'Login', new_user_session_path %></li>

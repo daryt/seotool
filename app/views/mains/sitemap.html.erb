@@ -10,7 +10,7 @@
 			        <ul class="nav nav-list">
 					<% @topics.each do |topic| %>
 					<li>
-						<%= check_box_tag(topic.name,topic.id,{checked: true}) %>
+						<%= check_box_tag(topic.name + '_topic',topic.id,{checked: true}) %>
 						<%= label_tag(topic.name, topic.name, class: "tree-toggler nav-header") %>
 
 						<ul class="nav nav-list tree">

@@ -15,7 +15,7 @@
 					<p><%= Keyword.find(val2).keyword %></p>
 
 					<div class="form-group">
-					<%= select_tag(key, options_for_select(Keyword.find(val2).headings.collect {|p| [p.heading, p.id]}, class: "col-sm-2 control-label")) %>
+					<%= select_tag(key + "_topic", options_for_select(Keyword.find(val2).headings.collect {|p| [p.heading, p.id]}, class: "col-sm-2 control-label")) %>
 					</div>
 
 				<% end %>

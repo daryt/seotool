@@ -1,0 +1,22 @@
+<div class='container'>
+	<div class='row'>
+
+		<h1>Overview for <%= @template.name %></h1>
+
+		<h2>Industry: <%= @industry.name %></h2>
+
+		<%= form_tag("/publish/", method: "post", class: "") do %>
+
+			<% @pages.each do |page| %>
+
+			<div>
+				<h3><%= Topic.find(page.topic_id).name %></h3>
+			</div>
+			<% end %>
+
+			<%= submit_tag("Save and Publish", class:"btn btn-primary") %>
+
+		<% end %>
+
+	</div>
+</div>
