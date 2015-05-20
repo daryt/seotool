@@ -6,6 +6,7 @@ class MainsController < ApplicationController
   	puts @templates
   end
 
+  # create a new template and render the sitemap with default info
   def new_template
     @template = Template.new(template_params)
     if @template.save
@@ -22,25 +23,94 @@ class MainsController < ApplicationController
     end
   end
 
-  def sitemap
-  	# create a check to see if we're starting a new template, or continuing an in-process one
-  	puts params[:industry][:id]
+  # render the sitemap page with default info
+  # def new_sitemap
+  # 	puts params[:industry][:id]
+  #   @template = Template.find(session[:current_template_id])
+  #   @industry = params[:industry]
+  #   @pages = @template.pages
+  # 	@topics = Industry.find(params[:industry][:id]).topics
+  #   render :sitemap
+  # end
 
-  	@topics = Industry.find(params[:industry][:id]).topics
-  	@industry = params[:industry]
+  # render the sitemap page with the already created pages marked
+  def show_sitemap
+    @template = Template.find(session[:current_template_id])
+    @industry = Industry.find(@template.industry_id)
+    @pages = @template.pages
+    puts YAML::dump(@pages)
+    @topics = @industry.topics
+    render :sitemap
   end
 
-  def keywords
-  	@topics = Hash.new;
-  	puts params
-  	params.each do |key,val|
-  		puts val.to_i.to_s
-  		if key.include? '_topic'
-  			@topics[key] = val.to_i
-			puts "#{key} => #{val}"
-		end
-  	end
-  	puts YAML::dump(@topics)
+  # update the template to reflect selected topics
+  # create (and destroy?) topics as necessary
+  # TODO: hook in destroy - unchecking doesn't do anything as of now
+  def update_topics
+    # if the page doesn't exist, create it for this template
+    params.each do |key,val|
+      if key.include? '_topic'
+        page = Template.find(session[:current_template_id]).pages.find_or_initialize_by(topic_id:val)
+        puts page.topic_id
+        page.save
+      end
+    end
+
+    redirect_to '/show_keywords'
+  end
+
+  # get all the pages and render the keywords page
+  def show_keywords
+    @pages = Template.find(session[:current_template_id]).pages
+    render :keywords
+  end
+
+  # get all the pages and render the keywords page
+  def update_keywords
+
+    @pages = Template.find(session[:current_template_id]).pages
+
+
+
+    @view_data = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
+
+    counter = 1
+
+    params.each do |key,val|
+      if key.include? '_keyword'
+        topic_id = ''
+        key.each_char { |c|
+          if c != '_'
+            topic_id += c
+          else
+            break
+          end
+        page = @pages.find_by_topic_id(topic_id)
+        puts page.id
+        case counter
+        when 1
+          page.k1_id = val
+        when 2
+          page.k2_id = val
+        when 3
+          page.k3_id = val
+        end
+        page.save
+        counter += 1
+        }
+        # top = topic_id.to_i
+        # puts top
+
+        # page = Template.find(session[:current_template_id]).pages.find_or_initialize_by(topic_id:val)
+        # puts page.topic_id
+        # page.save
+      end
+
+      counter = 1 if counter > 3
+
+    end
+    render :headings
+    # redirect_to '/show_keywords'
   end
 
   def headings
@@ -124,7 +194,9 @@ class MainsController < ApplicationController
     #   end
     # end
     # puts YAML::dump(@topics)
-    render :overview
+
+    redirect_to '/sitemap/'
+    # render :overview
   end
 
   def new_topic

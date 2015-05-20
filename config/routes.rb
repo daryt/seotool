@@ -7,12 +7,19 @@ Rails.application.routes.draw do
 
   post '/templates/' => 'mains#new_template'
 
-  # get '/sitemap' => 'mains#sitemap'
-  get '/sitemap' => 'mains#sitemap'
-  post '/industries/' => 'mains#sitemap'
-  get '/industries/' => 'mains#index'
 
-  post '/keywords/' => 'mains#keywords'
+  get '/sitemap' => 'mains#show_sitemap'
+  # post '/industries/' => 'mains#new_sitemap'
+
+  # get '/industries/' => 'mains#index'
+
+  post '/update_topics/' => 'mains#update_topics'
+
+  get '/show_keywords' => 'mains#show_keywords'
+
+  post '/update_keywords/' => 'mains#update_keywords'
+
+  get '/show_headings' => 'mains#show_headings'
 
   post '/headings/' => 'mains#headings'
 
