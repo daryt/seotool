@@ -65,14 +65,10 @@ class MainsController < ApplicationController
     render :keywords
   end
 
-  # get all the pages and render the keywords page
+  # save the keyword ids into the pages for this template
   def update_keywords
 
     @pages = Template.find(session[:current_template_id]).pages
-
-
-
-    @view_data = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
 
     counter = 1
 
@@ -86,72 +82,81 @@ class MainsController < ApplicationController
             break
           end
         page = @pages.find_by_topic_id(topic_id)
-        puts page.id
-        case counter
-        when 1
-          page.k1_id = val
-        when 2
-          page.k2_id = val
-        when 3
-          page.k3_id = val
-        end
+        # puts page.id
+        page['k' + counter.to_s + '_id'] = val
         page.save
         counter += 1
         }
-        # top = topic_id.to_i
-        # puts top
-
-        # page = Template.find(session[:current_template_id]).pages.find_or_initialize_by(topic_id:val)
-        # puts page.topic_id
-        # page.save
       end
 
       counter = 1 if counter > 3
 
     end
+    redirect_to '/show_headings'
+  end
+
+  def show_headings
+    @pages = Template.find(session[:current_template_id]).pages
     render :headings
-    # redirect_to '/show_keywords'
   end
 
-  def headings
-  	puts params
-  	@view_data = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
+  # save the heading ids into the pages for this template
+  def update_headings
 
-  	# known issue: does not reset counter value after each new topic id
-  	counter = 0;
+    @pages = Template.find(session[:current_template_id]).pages
 
-  	params.each do |key,val|
-  		if key.include? '_keyword'
-  			counter += 1
-  			# get topic id from post data
-  			topic_id = ''
-  			key.each_char { |c|
-  				if c != '_'
-					topic_id += c
-				else
-					break
-				end
-			}
-			# puts topic_id
-  			@view_data[topic_id]['keyword_' + counter.to_s] = val
-  			# puts val
-  		end
-  	end
-  	# puts @view_data
-  	puts YAML::dump(@view_data)
+    counter = 1
+
+    params.each do |key,val|
+      if key.include? '_heading'
+        topic_id = ''
+        key.each_char { |c|
+          if c != '_'
+            topic_id += c
+          else
+            break
+          end
+        page = @pages.find_by_topic_id(topic_id)
+        puts page.id
+        page['h' + counter.to_s + '_id'] = val
+        page.save
+        counter += 1
+        }
+      end
+
+      counter = 1 if counter > 3
+
+    end
+    redirect_to '/show_metas'
   end
 
-  def metas
-  	@topics = Hash.new;
-  	puts params
-  	params.each do |key,val|
-  		# puts val.to_i.to_s
-  		if key.include? '_topic'
-  			@topics[key] = val.to_i
-			# puts "#{key} => #{val}"
-		  end
-  	end
-  	puts YAML::dump(@topics)
+  def show_metas
+    @pages = Template.find(session[:current_template_id]).pages
+    render :metas
+  end
+
+  def update_metas
+
+    @pages = Template.find(session[:current_template_id]).pages
+
+    params.each do |key,val|
+      if key.include? '_meta'
+        topic_id = ''
+        key.each_char { |c|
+          if c != '_'
+            topic_id += c
+          else
+            break
+          end
+        page = @pages.find_by_topic_id(topic_id)
+        puts page.id
+        page['meta_id'] = val
+        page.save
+        }
+      end
+
+    end
+    redirect_to '/show_overview'
   end
 
   def post_overview
@@ -168,7 +173,7 @@ class MainsController < ApplicationController
     render :overview
   end
 
-  def show_overview
+  def retrieve_overview
     # create a check to see if we're starting a new template, or continuing an in-process one
     puts params[:id]
     @template = Template.find(params[:id])
@@ -199,14 +204,78 @@ class MainsController < ApplicationController
     # render :overview
   end
 
+  def show_overview
+    # create a check to see if we're starting a new template, or continuing an in-process one
+    # puts params[:id]
+    @template = Template.find(session[:current_template_id])
+    @industry = Industry.find(@template.industry_id)
+    @pages = @template.pages
+    # session[:current_template_id] = params[:id]
+
+    # puts YAML::dump(@pages)
+
+
+
+    # @topics = Industry.find(params[:id]).topics
+    # @industry = params[:industry]
+
+
+    # @topics = Hash.new;
+    # puts params
+    # params.each do |key,val|
+    #   # puts val.to_i.to_s
+    #   if key.include? '_topic'
+    #     @topics[key] = val.to_i
+    #   # puts "#{key} => #{val}"
+    #   end
+    # end
+    # puts YAML::dump(@topics)
+
+    # redirect_to '/sitemap/'
+    render :overview
+  end
+
   def new_topic
   	puts params
   	@topic = Industry.find(params[:industry_id]).topics.create(name:params[:name])
-  	respond_to do |format|
-	    msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
-	    format.json  { render :json => msg } # don't do msg.to_json
-	  end
+  	redirect_to '/partial/topics'
   	# render :nothing => true
+  end
+
+  def new_keyword
+    puts params
+    @keyword = Topic.find(params[:topic_id]).keywords.create(keyword:params[:keyword])
+    # respond_to do |format|
+    #   msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
+    #   format.json  { render :json => msg } # don't do msg.to_json
+    # end
+    redirect_to '/partial/keywords'
+  end
+
+  def new_heading
+    puts params
+    @heading = Keyword.find(params[:keyword_id]).headings.create(heading:params[:heading])
+    redirect_to '/partial/headings'
+  end
+
+  def new_meta
+    puts params
+    @meta = Topic.find(params[:topic_id]).metas.create(description:params[:description])
+    redirect_to '/partial/metas'
+  end
+
+  def partial
+    puts 'in partial'
+    @pages = Template.find(session[:current_template_id]).pages
+    if params[:section] == 'topics'
+      @template = Template.find(session[:current_template_id])
+      @industry = Industry.find(@template.industry_id)
+      @topics = @industry.topics
+    end
+    @section_id = params[:section]
+    respond_to do |format|
+      format.js
+    end
   end
 
   private

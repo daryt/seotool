@@ -1,0 +1,5 @@
+$('#dynamic-content').fadeOut(200, function(){
+	var url = "<%= j render(:partial => 'partial_' + @section_id) %>"
+	$('#dynamic-content').html(url);
+	$('#dynamic-content').fadeIn(500);
+});

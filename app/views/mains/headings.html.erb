@@ -1,31 +1,57 @@
 <div class='container'>
 	<div class='row'>
+		<div class ='col-md-6' id='dynamic-content'>
+		</div>
+		<!-- load the partial content that will refresh via ajax -->
+		<script>
+			var url = "<%= j render(:partial => 'partial_headings') %>"
+			$('#dynamic-content').html(url);
+		</script>
 
-		<h1>Select Headings Per Keyword Per Topic</h1>
-
-		<%= form_tag("/metas/", method: "post", class: "") do %>
-
-			<% @view_data.each do |key,val| %>
-
-			<div>
-				<h1><%= Topic.find(key).name %></h1>
-
-				<% val.each do |key2,val2| %>
-
-					<p><%= Keyword.find(val2).keyword %></p>
-
-					<div class="form-group">
-					<%= select_tag(key + "_topic", options_for_select(Keyword.find(val2).headings.collect {|p| [p.heading, p.id]}, class: "col-sm-2 control-label")) %>
-					</div>
-
-				<% end %>
-
+		<div class='col-md-6'>
+			<div id='confirm'>
 			</div>
-			<% end %>
-
-			<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
-
-		<% end %>
+		</div>
 
 	</div>
 </div>
+<script>
+$(document).ready(function(){
+	$('.new-heading-submit').click(function(){
+		var formData = $(this).siblings(".new-heading-name").val();
+		var keywordID = $(this).attr('data-keyword-id');
+		console.log(formData);
+		var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-heading-confirm" data-keyword-id=' + keywordID + ' value="' + formData + '">Yes</button>';
+		$('#confirm').html(html);
+		$(this).siblings(".new-heading-name").val('');
+		return false;
+	});
+});
+
+$(document).on('click','.new-heading-confirm',function(){
+
+	var formData = $(this).attr('value');
+	var keywordID = $(this).attr('data-keyword-id');
+
+	console.log(formData,keywordID);
+
+	// $('#confirm').html('<img src="/images/ajax-loader.gif" alt="ajax spinner"/>');
+
+	$('#confirm').html('<%= image_tag "ajax-loader.gif" %>');
+
+	$.ajax({
+	    url : '/headings/new', //Target URL for JSON file
+	    // contentType: 'application/json',
+	    method: 'POST',
+	    data: {'heading':formData, 'keyword_id':keywordID},
+	    success : function(data){
+	        $('#confirm').html('Success!');
+	    },
+	    error : function(xhr, status){
+	        console.log(status);
+	    }
+	});
+
+	return false;
+});
+</script>

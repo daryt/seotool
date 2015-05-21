@@ -1,24 +1,57 @@
 <div class='container'>
 	<div class='row'>
+		<div class='col-md-6' id='dynamic-content'>
+		</div>
+		<!-- load the partial content that will refresh via ajax -->
+		<script>
+			var url = "<%= j render(:partial => 'partial_metas') %>"
+			$('#dynamic-content').html(url);
+		</script>
 
-		<h1>Select Meta Description Per Topic</h1>
-
-		<%= form_tag("/overview/", method: "post", class: "") do %>
-
-			<% @topics.each do |key,val| %>
-
-			<div>
-				<h1><%= Topic.find(key).name %></h1>
-
-				<div class="form-group">
-					<%= select_tag(key, options_for_select(Topic.find(key).metas.collect {|p| [p.description, p.id]}, class: "col-sm-2 control-label")) %>
-				</div>
+		<div class='col-md-6'>
+			<div id='confirm'>
 			</div>
-			<% end %>
-
-			<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
-
-		<% end %>
+		</div>
 
 	</div>
 </div>
+<script>
+$(document).ready(function(){
+	$('.new-meta-submit').click(function(){
+		var formData = $(this).siblings(".new-meta-name").val();
+		var keywordID = $(this).attr('data-topic-id');
+		console.log(formData);
+		var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-meta-confirm" data-topic-id=' + keywordID + ' value="' + formData + '">Yes</button>';
+		$('#confirm').html(html);
+		$(this).siblings(".new-meta-name").val('');
+		return false;
+	});
+});
+
+$(document).on('click','.new-meta-confirm',function(){
+
+	var formData = $(this).attr('value');
+	var topicID = $(this).attr('data-topic-id');
+
+	console.log(formData,topicID);
+
+	// $('#confirm').html('<img src="/images/ajax-loader.gif" alt="ajax spinner"/>');
+
+	$('#confirm').html('<%= image_tag "ajax-loader.gif" %>');
+
+	$.ajax({
+	    url : '/metas/new', //Target URL for JSON file
+	    // contentType: 'application/json',
+	    method: 'POST',
+	    data: {'description':formData, 'topic_id':topicID},
+	    success : function(data){
+	        $('#confirm').html('Success!');
+	    },
+	    error : function(xhr, status){
+	        console.log(status);
+	    }
+	});
+
+	return false;
+});
+</script>

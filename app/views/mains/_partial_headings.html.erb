@@ -1,0 +1,32 @@
+<h1>Select Headings Per Keyword Per Topic</h1>
+
+<%= form_tag("/update_headings/", method: "post", class: "") do %>
+
+	<% @pages.each do |page| %>
+
+	<div>
+		<h1><%= Topic.find(page.topic_id).name %></h1>
+
+		<% for i in 1..3 %>
+
+			<% keyword_id = page['k' + i.to_s + '_id'] %>
+
+			<p>Keyword: <%= Keyword.find(keyword_id).keyword %></p>
+
+			<div class="form-group">
+			<%= select_tag(page.topic_id.to_s  + '_' + i.to_s + "_heading", options_for_select(Keyword.find(keyword_id).headings.collect {|p| [p.heading, p.id]}, selected: page['h' + i.to_s + '_id'], class: "col-sm-2 control-label")) %>
+			</div>
+
+			<div class='form-group'>
+				<input class='new-heading-name' type='text'>
+				<button class='new-heading-submit' data-keyword-id=<%= keyword_id %>>Add Heading</button>
+			</div>
+
+		<% end %>
+
+	</div>
+	<% end %>
+
+	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+
+<% end %>

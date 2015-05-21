@@ -1,0 +1,24 @@
+<h1>Select Meta Description Per Topic</h1>
+
+<%= form_tag("/update_metas/", method: "post", class: "") do %>
+
+	<% @pages.each do |page| %>
+
+	<div>
+		<h1><%= Topic.find(page.topic_id).name %></h1>
+
+		<div class="form-group">
+			<%= select_tag(page.topic_id.to_s + '_meta', options_for_select(Topic.find(page.topic_id).metas.collect {|p| [p.description, p.id]}, selected: page.meta_id, class: "col-sm-2 control-label")) %>
+		</div>
+
+		<div class='form-group'>
+			<input class='new-meta-name' type='text'>
+			<button class='new-meta-submit' data-topic-id=<%= page.topic_id %>>Add Meta Description</button>
+		</div>
+
+	</div>
+	<% end %>
+
+	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+
+<% end %>

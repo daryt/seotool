@@ -3,29 +3,29 @@ Rails.application.routes.draw do
   # resources :industries
 
   post '/overview/' => 'mains#post_overview'
-  post '/show_overview' => 'mains#show_overview'
+  post '/retrieve_overview/' => 'mains#retrieve_overview'
+  get '/show_overview' => 'mains#show_overview'
 
   post '/templates/' => 'mains#new_template'
 
-
   get '/sitemap' => 'mains#show_sitemap'
-  # post '/industries/' => 'mains#new_sitemap'
-
-  # get '/industries/' => 'mains#index'
-
   post '/update_topics/' => 'mains#update_topics'
+  post '/topics/new' => 'mains#new_topic'
 
   get '/show_keywords' => 'mains#show_keywords'
-
   post '/update_keywords/' => 'mains#update_keywords'
+  post '/keywords/new' => 'mains#new_keyword'
 
   get '/show_headings' => 'mains#show_headings'
+  post '/headings/new' => 'mains#new_heading'
+  post '/update_headings/' => 'mains#update_headings'
 
-  post '/headings/' => 'mains#headings'
+  get '/show_metas' => 'mains#show_metas'
+  post '/metas/new' => 'mains#new_meta'
+  post '/update_metas/' => 'mains#update_metas'
 
-  post '/metas/' => 'mains#metas'
+  get '/partial/:section' => 'mains#partial'
 
-  post '/topics/new' => 'mains#new_topic'
 
   get '/' => 'mains#index'
 

@@ -19,7 +19,7 @@
 	        </div>
 	    </div>
 
-		<div class="actions">
+		<div class="actions col-sm-6 col-sm-offset-2" style='padding:5px'>
 		  	<%= f.submit "Select",class:"btn btn-primary" %>
 		</div>
 
@@ -31,7 +31,7 @@
 
 		<h1>Select an in-process template</h1>
 
-		<%= form_tag("/show_overview/", method: "post", class: "") do %>
+		<%= form_tag("/retrieve_overview/", method: "post", class: "") do %>
 
 		<div class="form-group">
 			<%= select_tag(:id, options_for_select(@templates.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label")) %>
