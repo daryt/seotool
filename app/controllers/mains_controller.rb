@@ -73,8 +73,10 @@ class MainsController < ApplicationController
     counter = 1
 
     params.each do |key,val|
+
       if key.include? '_keyword'
         topic_id = ''
+        # puts key
         key.each_char { |c|
           if c != '_'
             topic_id += c
@@ -82,7 +84,8 @@ class MainsController < ApplicationController
             break
           end
         page = @pages.find_by_topic_id(topic_id)
-        # puts page.id
+        puts page.id
+        # puts counter
         page['k' + counter.to_s + '_id'] = val
         page.save
         counter += 1

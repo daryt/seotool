@@ -4,6 +4,14 @@ todos:
 
 - Lockdown params for all post defs to prevent malicious form posting
 
+5/22/15
+
+Can't add another new topic/keyword/etc?
+
+Making a new template seems kinda wonky
+
+Breaks when you have identical keyword column for keywords
+
 5/19/15
 
 Store the id of the template in session. Display the name of the template at the top?
