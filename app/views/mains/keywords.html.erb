@@ -1,6 +1,6 @@
 <div class='container'>
 	<div class='row'>
-		<div class='col-md-6' id='dynamic-content'>
+		<div class='col-xs-6' id='dynamic-content'>
 		</div>
 		<!-- load the partial content that will refresh via ajax -->
 		<script>
@@ -8,7 +8,7 @@
 			$('#dynamic-content').html(url);
 		</script>
 
-		<div class ='col-md-6'>
+		<div class ='col-xs-6'>
 			<div id='confirm'>
 			</div>
 		</div>
@@ -17,17 +17,16 @@
 <script>
 $(document).ready(function(){
 
-	$('.new-keyword-submit').click(function(){
+});
 
-		var formData = $(this).siblings(".new-keyword-name").val();
-		var topicID = $(this).attr('data-topic-id');
-		console.log(formData);
-		var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-keyword-confirm" data-topic-id=' + topicID + ' value="' + formData + '">Yes</button>';
-		$('#confirm').html(html);
-		$(this).siblings(".new-keyword-name").val('');
-		return false;
-	});
-
+$(document).on('click','.new-keyword-submit',function(){
+	var formData = $(this).siblings(".new-keyword-name").val();
+	var topicID = $(this).attr('data-topic-id');
+	console.log(formData);
+	var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-keyword-confirm" data-topic-id=' + topicID + ' value="' + formData + '">Yes</button>';
+	$('#confirm').html(html);
+	$(this).siblings(".new-keyword-name").val('');
+	return false;
 });
 
 $(document).on('click','.new-keyword-confirm',function(){

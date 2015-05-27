@@ -17,15 +17,17 @@
 </div>
 <script>
 $(document).ready(function(){
-	$('.new-heading-submit').click(function(){
-		var formData = $(this).siblings(".new-heading-name").val();
-		var keywordID = $(this).attr('data-keyword-id');
-		console.log(formData);
-		var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-heading-confirm" data-keyword-id=' + keywordID + ' value="' + formData + '">Yes</button>';
-		$('#confirm').html(html);
-		$(this).siblings(".new-heading-name").val('');
-		return false;
-	});
+
+});
+
+$(document).on('click','.new-heading-submit',function(){
+	var formData = $(this).siblings(".new-heading-name").val();
+	var keywordID = $(this).attr('data-keyword-id');
+	console.log(formData);
+	var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-heading-confirm" data-keyword-id=' + keywordID + ' value="' + formData + '">Yes</button>';
+	$('#confirm').html(html);
+	$(this).siblings(".new-heading-name").val('');
+	return false;
 });
 
 $(document).on('click','.new-heading-confirm',function(){

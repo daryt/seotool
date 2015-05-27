@@ -38,7 +38,7 @@ class MainsController < ApplicationController
     @template = Template.find(session[:current_template_id])
     @industry = Industry.find(@template.industry_id)
     @pages = @template.pages
-    puts YAML::dump(@pages)
+    # puts YAML::dump(@pages)
     @topics = @industry.topics
     render :sitemap
   end
@@ -83,13 +83,14 @@ class MainsController < ApplicationController
           else
             break
           end
+        }
+        puts topic_id + ' topic id'
         page = @pages.find_by_topic_id(topic_id)
-        puts page.id
+        # puts page.id
         # puts counter
         page['k' + counter.to_s + '_id'] = val
         page.save
         counter += 1
-        }
       end
 
       counter = 1 if counter > 3
@@ -119,12 +120,12 @@ class MainsController < ApplicationController
           else
             break
           end
+        }
         page = @pages.find_by_topic_id(topic_id)
         puts page.id
         page['h' + counter.to_s + '_id'] = val
         page.save
         counter += 1
-        }
       end
 
       counter = 1 if counter > 3
@@ -151,11 +152,11 @@ class MainsController < ApplicationController
           else
             break
           end
+        }
         page = @pages.find_by_topic_id(topic_id)
         puts page.id
         page['meta_id'] = val
         page.save
-        }
       end
 
     end

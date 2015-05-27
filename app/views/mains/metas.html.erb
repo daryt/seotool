@@ -17,15 +17,17 @@
 </div>
 <script>
 $(document).ready(function(){
-	$('.new-meta-submit').click(function(){
-		var formData = $(this).siblings(".new-meta-name").val();
-		var keywordID = $(this).attr('data-topic-id');
-		console.log(formData);
-		var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-meta-confirm" data-topic-id=' + keywordID + ' value="' + formData + '">Yes</button>';
-		$('#confirm').html(html);
-		$(this).siblings(".new-meta-name").val('');
-		return false;
-	});
+
+});
+
+$(document).on('click','.new-meta-submit',function(){
+	var formData = $(this).siblings(".new-meta-name").val();
+	var keywordID = $(this).attr('data-topic-id');
+	console.log(formData);
+	var html = '<h3>Add "' + formData + '" to database?</h3><button class="new-meta-confirm" data-topic-id=' + keywordID + ' value="' + formData + '">Yes</button>';
+	$('#confirm').html(html);
+	$(this).siblings(".new-meta-name").val('');
+	return false;
 });
 
 $(document).on('click','.new-meta-confirm',function(){

@@ -17,15 +17,14 @@
 <script>
 $(document).ready(function(){
 
-	$('#new-topic-submit').click(function(){
+});
 
-		var formData = $("#new-topic-name").val();
-		console.log(formData);
-		var html = '<h3>Add "' + formData + '" to database?</h3><button id="new-topic-confirm" value="' + formData + '">Yes</button>';
-		$('#confirm').html(html);
-		return false;
-	});
-
+$(document).on('click','#new-topic-submit',function(){
+	var formData = $("#new-topic-name").val();
+	console.log(formData);
+	var html = '<h3>Add "' + formData + '" to database?</h3><button id="new-topic-confirm" value="' + formData + '">Yes</button>';
+	$('#confirm').html(html);
+	return false;
 });
 
 $(document).on('click','#new-topic-confirm',function(){
