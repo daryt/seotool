@@ -26,9 +26,9 @@
 		        <ul class="nav navbar-nav navbar-right">
 
 		        	<% if current_template %>
-			            	<li class='nav-item'>Editing template: <%= current_template.name %></li>
+			            	<li class='nav-item'><%= link_to 'Editing template: ' + current_template.name, '/show_overview', style: "color:yellow" %></li>
 			            <% else %>
-			            	<li class='nav-item'>No current template</li>
+			            	<li>No current template</li>
 			            <% end %>
 
 		            <% if current_user %>

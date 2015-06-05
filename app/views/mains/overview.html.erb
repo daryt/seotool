@@ -5,14 +5,45 @@
 
 		<h2>Industry: <%= @industry.name %></h2>
 
-		<%= form_tag("/publish/", method: "post", class: "") do %>
+		<%= form_tag("/update_overview/", method: "post", class: "form-horizontal") do %>
 
 			<% @pages.each do |page| %>
 
-			<div>
-				<h3><%= Topic.find(page.topic_id).name %></h3>
+			<div class='form-group'>
+				<label class='col-sm-1 control-label'>Topic</label>
+				<div class="col-sm-6">
+					<%= text_field_tag(page.id.to_s + '_topic', Topic.find(page.topic_id).name, class: "topic-input form-control") %>
+				</div>
 			</div>
+
+				<% for i in 1..3 %>
+
+					<div class='form-group'>
+						<label class='col-sm-2 control-label'>Keyword <%= i %></label>
+						<div class="col-sm-6">
+							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_keyword', Keyword.find(page['k' + i.to_s + '_id']).keyword, class: "subdivision-input form-control") %>
+						</div>
+					</div>
+
+					<div class='form-group'>
+						<label class='col-sm-2 control-label'>Heading <%= i %></label>
+						<div class="col-sm-6">
+							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_heading', Heading.find(page['h' + i.to_s + '_id']).heading, class: "subdivision-input form-control") %>
+						</div>
+					</div>
+
+				<% end %>
+
+				<div class='form-group'>
+					<label class='col-sm-2 control-label'>Meta Description</label>
+					<div class="col-sm-6">
+						<%= text_field_tag(page.id.to_s + '_meta', Meta.find(page.meta_id).description, class: "subdivision-input form-control") %>
+					</div>
+				</div>
+				
 			<% end %>
+
+			<%= submit_tag("Save Draft", class:"btn btn-primary") %>
 
 			<%= submit_tag("Save and Publish", class:"btn btn-primary") %>
 

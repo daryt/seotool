@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   post '/overview/' => 'mains#post_overview'
   post '/retrieve_overview/' => 'mains#retrieve_overview'
   get '/show_overview' => 'mains#show_overview'
+  post '/update_overview' => 'mains#update_overview'
 
   post '/templates/' => 'mains#new_template'
 
@@ -26,15 +27,9 @@ Rails.application.routes.draw do
 
   get '/partial/:section' => 'mains#partial'
 
-
   get '/' => 'mains#index'
 
   devise_for :users, :controllers => { registrations: 'users/registrations', sessions: 'users/sessions' }
-
-  # root :to => "users#test"
-
-  # get '/' => 'users#new'
-
 
   # resources :users
 

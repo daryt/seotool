@@ -3,7 +3,7 @@ class MainsController < ApplicationController
   def index
   	@template = Template.new
   	@templates = Template.where(status: 'draft')
-  	puts @templates
+  	# puts @templates
   end
 
   # create a new template and render the sitemap with default info
@@ -13,6 +13,7 @@ class MainsController < ApplicationController
         puts template_params
         @industry = Industry.find(template_params[:industry_id])
         @topics = @industry.topics
+        @pages = @template.pages
         session[:current_template_id] = @template[:id]
         render :sitemap
       else
@@ -158,7 +159,6 @@ class MainsController < ApplicationController
         page['meta_id'] = val
         page.save
       end
-
     end
     redirect_to '/show_overview'
   end
@@ -237,6 +237,116 @@ class MainsController < ApplicationController
 
     # redirect_to '/sitemap/'
     render :overview
+  end
+
+  def update_overview
+
+    template = Template.find(session[:current_template_id])
+    industry = Industry.find(template.industry_id)
+
+    # go through every input field and save the information
+    params.each do |key,val|
+      if key.include? '_topic'
+        page_id = ''
+        key.each_char { |c|
+          if c != '_'
+            page_id += c
+          else
+            break
+          end
+        }
+        page = template.pages.find(page_id)
+        puts page_id + ' page_id'
+        val.strip!
+        topic = industry.topics.find_or_initialize_by(name:val)
+        topic.save
+        page.topic_id = topic.id
+        page.save
+        next
+      end
+      if key.include? '_keyword'
+        page_id = ''
+        keyword_id = ''
+        underscore_count = 0;
+        key.each_char { |c|
+          if c != '_'
+            if underscore_count >= 1
+              keyword_id += c
+            else
+              page_id += c
+            end
+          else
+            underscore_count += 1 if c == '_'
+            if (underscore_count >= 2)
+              break
+            end
+          end
+        }
+        page = template.pages.find(page_id)
+        puts page_id + ' page_id'
+        puts page.topic_id.to_s + ' topic_id'
+        val.strip!
+        puts 'keyword: ' + val
+        keyword = Topic.find(page.topic_id).keywords.where(keyword:val).first
+        if !keyword
+          keyword = Topic.find(page.topic_id).keywords.create(keyword:val)
+        end
+        page['k' + keyword_id.to_s + '_id'] = keyword.id
+        page.save
+        next
+      end
+      if key.include? '_heading'
+        page_id = ''
+        heading_id = ''
+        underscore_count = 0;
+        key.each_char { |c|
+          if c != '_'
+            if underscore_count >= 1
+              heading_id += c
+            else
+              page_id += c
+            end
+          else
+            underscore_count += 1 if c == '_'
+            if (underscore_count >= 2)
+              break
+            end
+          end
+        }
+        page = template.pages.find(page_id)
+        # puts page_id + ' page_id'
+        # puts page.topic_id.to_s + ' topic_id'
+        val.strip!
+        puts 'heading: ' + val
+        heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.where(heading:val).first
+        if !heading
+          heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.create(heading:val)
+        end
+        page['h' + heading_id.to_s + '_id'] = heading.id
+        page.save
+        next
+        end
+      if key.include? '_meta'
+        page_id = ''
+        key.each_char { |c|
+          if c != '_'
+            page_id += c
+          else
+            break
+          end
+        }
+        page = template.pages.find(page_id)
+        puts page_id + ' page_id'
+        val.strip!
+        meta = Topic.find(page.topic_id).metas.find_or_initialize_by(description:val)
+        meta.save
+        page.meta_id = meta.id
+        page.save
+        next
+      end
+    end
+
+    redirect_to '/show_overview'
   end
 
   def new_topic

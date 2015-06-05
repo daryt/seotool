@@ -1,6 +1,6 @@
 <h1>Select Keywords Per Topic</h1>
 
-	<%= form_tag("/update_keywords/", method: "post", class: "") do %>
+	<%= form_tag("/update_keywords/", method: "post", class: "form-data") do %>
 
 	<% @pages.each do |page| %>
 
@@ -23,6 +23,6 @@
 
 	<% end %>
 
-	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+	<%= submit_tag("Save and Continue", class:"btn btn-primary validate-fields") %>
 
 <% end %>

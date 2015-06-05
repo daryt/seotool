@@ -2,10 +2,20 @@ seotool notes
 
 todos:
 
-- PHP authenticate
+- Allow for user to deselect/remove pages
+
 
 - Lockdown params for all post defs to prevent malicious form posting
 
+5/29/15
+
+
+
+Overview page:
+
+User able to directly edit fields as text inputs? Save individually ... or save only at one time. Fanyc way ... on focus, set flag, and on blur, check to save that field?
+
+For now, check all at one time? How do we know which ones were altered? Do mass validation ... check every single one to make sure that it's a legitimate entry.
 
 5/22/15
 

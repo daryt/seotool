@@ -17,6 +17,79 @@
 <script>
 $(document).ready(function(){
 
+
+});
+
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
+//perform client-side validations to ensure they aren't trying to use dupe keywords per topic
+$(document).on('click','.validate-fields',function(){
+
+	var formData = $('.form-data').serializeObject();
+
+	var keyword_ids = {};
+
+	$.each(formData, function(key,value){	
+		// var underscore_count = 0;
+		if (key.indexOf('keyword') != -1)
+		{
+			// first, get the topic id and the keyword count of this keyword
+			// then, let's compare against the other keywords with the same topic id
+			var topic_id = '';
+			for (var i=0;i<key.length;i++)
+			{
+				if (key[i] != '_')
+				{
+					topic_id += key[i];
+				}else{
+					break;
+				}
+			}
+			$.each(formData, function(key2,value2){
+				if (key2.indexOf('keyword') != -1 && key != key2)
+				{		
+					var topic_id_compare = '';
+					var keyword_count = '';
+					for (var i=0;i<key2.length;i++)
+					{
+						if (key2[i] != '_')
+						{
+							topic_id_compare += key2[i];
+						}else{
+							if (topic_id == topic_id_compare && value == value2)
+							{
+								keyword_ids[key] = "duplicate value";
+								// console.log("same topic and keyword id", topic_id, value);
+							}
+							break;
+						}
+					}
+				}
+			});
+			// console.log(key, topic_id, keyword_count);
+		}
+	});
+
+	if (Object.keys(keyword_ids).length > 0)
+	{
+		alert('duplicate keyword ids found');
+		return false;
+	}
 });
 
 $(document).on('click','.new-keyword-submit',function(){
