@@ -375,7 +375,7 @@ class MainsController < ApplicationController
     end
 
     # meta = Topic.find(topic).metas.create(description: bulk_params[:meta])
-    page = Page.create(topic_id: topic, k1_id: keyword1, k2_id: keyword2, k3_id: keyword3, h1_id: heading1, h2_id: heading2, h3_id: heading3, meta_id: meta)
+  
     
     customerCheck = Customer.where(name: bulk_params[:customer]).pluck(:id).first
     if customerCheck.nil?
@@ -392,6 +392,8 @@ class MainsController < ApplicationController
     else
       template = templateCheck
     end
+
+    page = Template.find(template).pages.create(topic_id: topic, k1_id: keyword1, k2_id: keyword2, k3_id: keyword3, h1_id: heading1, h2_id: heading2, h3_id: heading3, meta_id: meta)
 
 
 
