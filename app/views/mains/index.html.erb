@@ -8,7 +8,7 @@
 		<div class="form-group">
 			<%= f.label :industry, class: "col-sm-2 control-label" %>
 			<div class="col-sm-6">
-				<%= f.select :industry_id, Industry.all.collect {|p| [p.name, p.id]}, class: "form-control" %>
+				<%= f.select :industry_id, Industry.all.collect {|p| [p.name, p.id]}, {}, class: "form-control" %>
 			</div>
 		</div>
 
@@ -20,7 +20,7 @@
 	    </div>
 
 		<div class="actions col-sm-6 col-sm-offset-2" style='padding:5px'>
-		  	<%= f.submit "Select",class:"btn btn-primary" %>
+		  	<%= f.submit "Create",class:"btn btn-success" %>
 		</div>
 
 		<% end %>
@@ -31,13 +31,16 @@
 
 		<h1>Select an in-process template</h1>
 
-		<%= form_tag("/retrieve_overview/", method: "post", class: "") do %>
+		<%= form_tag("/retrieve_overview/", method: "post", class: "form-horizontal") do %>
 
 		<div class="form-group">
-			<%= select_tag(:id, options_for_select(@templates.collect {|p| [p.name, p.id]}, class: "col-sm-2 control-label")) %>
+			<%= label_tag 'Template name', nil, class: "col-sm-2 control-label" %>
+			<div class='col-sm-6'>
+				<%= select_tag(:id, options_for_select(@templates.collect {|p| [p.name, p.id]}), class: "form-control") %>
+			</div>
 		</div>
 
-		<div class="actions">
+		<div class="actions col-sm-6 col-sm-offset-2" style='padding:5px'>
 			<%= submit_tag("Select", class:"btn btn-primary") %>
 		</div>
 

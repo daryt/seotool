@@ -37,19 +37,18 @@ $.fn.serializeObject = function()
     return o;
 };
 
-//perform client-side validations to ensure they aren't trying to use dupe keywords per topic
+// Perform client-side validations to ensure they aren't trying to use dupe keywords per topic
 $(document).on('click','.validate-fields',function(){
 
 	var formData = $('.form-data').serializeObject();
 
 	var keyword_ids = {};
 
-	$.each(formData, function(key,value){	
-		// var underscore_count = 0;
+	$.each(formData, function(key,value){
 		if (key.indexOf('keyword') != -1)
 		{
-			// first, get the topic id and the keyword count of this keyword
-			// then, let's compare against the other keywords with the same topic id
+			// First, get the topic id and the keyword count of this keyword
+			// Then, let's compare against the other keywords with the same topic id
 			var topic_id = '';
 			for (var i=0;i<key.length;i++)
 			{
@@ -62,7 +61,7 @@ $(document).on('click','.validate-fields',function(){
 			}
 			$.each(formData, function(key2,value2){
 				if (key2.indexOf('keyword') != -1 && key != key2)
-				{		
+				{
 					var topic_id_compare = '';
 					var keyword_count = '';
 					for (var i=0;i<key2.length;i++)
@@ -74,20 +73,22 @@ $(document).on('click','.validate-fields',function(){
 							if (topic_id == topic_id_compare && value == value2)
 							{
 								keyword_ids[key] = "duplicate value";
-								// console.log("same topic and keyword id", topic_id, value);
 							}
 							break;
 						}
 					}
 				}
 			});
-			// console.log(key, topic_id, keyword_count);
 		}
 	});
 
 	if (Object.keys(keyword_ids).length > 0)
 	{
-		alert('duplicate keyword ids found');
+		// alert('duplicate keyword ids found');
+		$('#confirm').fadeOut(200, function(){
+			$('#confirm').html('<h3 class="warning">Duplicate keywords detected!</h3><p>Please ensure each topic has three UNIQUE keywords</p>');
+			$('#confirm').fadeIn(300);
+		});
 		return false;
 	}
 });
@@ -109,17 +110,13 @@ $(document).on('click','.new-keyword-confirm',function(){
 
 	console.log(formData,topicID);
 
-	// $('#confirm').html('<img src="/images/ajax-loader.gif" alt="ajax spinner"/>');
-
 	$('#confirm').html('<%= image_tag "ajax-loader.gif" %>');
 
 	$.ajax({
 	    url : '/keywords/new', //Target URL for JSON file
-	    // contentType: 'application/json',
 	    method: 'POST',
 	    data: {'keyword':formData, 'topic_id':topicID},
 	    success : function(data){
-	        // console.log(data);
 	        $('#confirm').html('Success!');
 	    },
 	    error : function(xhr, status){

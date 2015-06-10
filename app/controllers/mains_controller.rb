@@ -1,12 +1,19 @@
+# TODO: program description
+#
+# Authors::    Justin Kim and Tyler Dary
+# Copyright::
+# License::
+
+# Primary controller class for SEO Tool application
+
 class MainsController < ApplicationController
 
   def index
   	@template = Template.new
   	@templates = Template.where(status: 'draft')
-  	# puts @templates
   end
 
-  # create a new template and render the sitemap with default info
+  # Create a new template and render the sitemap with default info
   def new_template
     @template = Template.new(template_params)
     if @template.save
@@ -24,17 +31,7 @@ class MainsController < ApplicationController
     end
   end
 
-  # render the sitemap page with default info
-  # def new_sitemap
-  # 	puts params[:industry][:id]
-  #   @template = Template.find(session[:current_template_id])
-  #   @industry = params[:industry]
-  #   @pages = @template.pages
-  # 	@topics = Industry.find(params[:industry][:id]).topics
-  #   render :sitemap
-  # end
-
-  # render the sitemap page with the already created pages marked
+  # Render the sitemap page with existing pages checked
   def show_sitemap
     @template = Template.find(session[:current_template_id])
     @industry = Industry.find(@template.industry_id)
@@ -44,29 +41,40 @@ class MainsController < ApplicationController
     render :sitemap
   end
 
-  # update the template to reflect selected topics
-  # create (and destroy?) topics as necessary
-  # TODO: hook in destroy - unchecking doesn't do anything as of now
+  # Update the template to reflect selected topics
   def update_topics
-    # if the page doesn't exist, create it for this template
+    pages_to_remove = []
+    pages = Template.find(session[:current_template_id]).pages
+    pages.each do |page|
+      pages_to_remove.push(page.id)
+    end
+
+    # If the page doesn't exist, create it for this template
     params.each do |key,val|
       if key.include? '_topic'
         page = Template.find(session[:current_template_id]).pages.find_or_initialize_by(topic_id:val)
-        puts page.topic_id
+        pages_to_remove.reject! { |a| a == page.id }
+        # puts page.topic_id
         page.save
       end
     end
 
+    pages_to_remove.each { |a|
+      Page.find(a).destroy
+    }
+
+    puts 'updating topics'
+
     redirect_to '/show_keywords'
   end
 
-  # get all the pages and render the keywords page
+  # Get all the pages and render the keywords page
   def show_keywords
     @pages = Template.find(session[:current_template_id]).pages
     render :keywords
   end
 
-  # save the keyword ids into the pages for this template
+  # Save the keyword ids into the pages for this template
   def update_keywords
 
     @pages = Template.find(session[:current_template_id]).pages
@@ -100,12 +108,13 @@ class MainsController < ApplicationController
     redirect_to '/show_headings'
   end
 
+  # Render the headings page
   def show_headings
     @pages = Template.find(session[:current_template_id]).pages
     render :headings
   end
 
-  # save the heading ids into the pages for this template
+  # Save the heading ids into the pages for this template
   def update_headings
 
     @pages = Template.find(session[:current_template_id]).pages
@@ -135,11 +144,13 @@ class MainsController < ApplicationController
     redirect_to '/show_metas'
   end
 
+  # Render the metas page
   def show_metas
     @pages = Template.find(session[:current_template_id]).pages
     render :metas
   end
 
+  # Save the meta ids into the pages for this template
   def update_metas
 
     @pages = Template.find(session[:current_template_id]).pages
@@ -163,90 +174,35 @@ class MainsController < ApplicationController
     redirect_to '/show_overview'
   end
 
-  def post_overview
-    @topics = Hash.new;
-    puts params
-    params.each do |key,val|
-      # puts val.to_i.to_s
-      if key.include? '_topic'
-        @topics[key] = val.to_i
-      # puts "#{key} => #{val}"
-      end
-    end
-    puts YAML::dump(@topics)
-    render :overview
-  end
-
+  # Retrieve template info for an in-process template
   def retrieve_overview
-    # create a check to see if we're starting a new template, or continuing an in-process one
     puts params[:id]
     @template = Template.find(params[:id])
     @industry = Industry.find(@template.industry_id)
     @pages = @template.pages
     session[:current_template_id] = params[:id]
 
-    # puts YAML::dump(@pages)
-
-
-
-    # @topics = Industry.find(params[:id]).topics
-    # @industry = params[:industry]
-
-
-    # @topics = Hash.new;
-    # puts params
-    # params.each do |key,val|
-    #   # puts val.to_i.to_s
-    #   if key.include? '_topic'
-    #     @topics[key] = val.to_i
-    #   # puts "#{key} => #{val}"
-    #   end
-    # end
-    # puts YAML::dump(@topics)
-
     redirect_to '/sitemap/'
-    # render :overview
   end
 
+  # Render the overview edit page
   def show_overview
-    # create a check to see if we're starting a new template, or continuing an in-process one
-    # puts params[:id]
     @template = Template.find(session[:current_template_id])
     @industry = Industry.find(@template.industry_id)
     @pages = @template.pages
-    # session[:current_template_id] = params[:id]
 
-    # puts YAML::dump(@pages)
-
-
-
-    # @topics = Industry.find(params[:id]).topics
-    # @industry = params[:industry]
-
-
-    # @topics = Hash.new;
-    # puts params
-    # params.each do |key,val|
-    #   # puts val.to_i.to_s
-    #   if key.include? '_topic'
-    #     @topics[key] = val.to_i
-    #   # puts "#{key} => #{val}"
-    #   end
-    # end
-    # puts YAML::dump(@topics)
-
-    # redirect_to '/sitemap/'
     render :overview
   end
 
+  # Process changes in the overview page
   def update_overview
-
     template = Template.find(session[:current_template_id])
     industry = Industry.find(template.industry_id)
 
-    # go through every input field and save the information
+    # Go through every input field and create/update as needed
     params.each do |key,val|
-      if key.include? '_topic'
+      if key.include?'_topic'
+        puts 'value: ' + val
         page_id = ''
         key.each_char { |c|
           if c != '_'
@@ -264,7 +220,7 @@ class MainsController < ApplicationController
         page.save
         next
       end
-      if key.include? '_keyword'
+      if key.include?'_keyword'
         page_id = ''
         keyword_id = ''
         underscore_count = 0;
@@ -295,7 +251,7 @@ class MainsController < ApplicationController
         page.save
         next
       end
-      if key.include? '_heading'
+      if key.include?'_heading'
         page_id = ''
         heading_id = ''
         underscore_count = 0;
@@ -314,9 +270,12 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        # puts page_id + ' page_id'
-        # puts page.topic_id.to_s + ' topic_id'
         val.strip!
+        if val == ''
+          page['h' + heading_id.to_s + '_id'] = ''
+          page.save
+          next
+        end
         puts 'heading: ' + val
         heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.where(heading:val).first
         if !heading
@@ -325,7 +284,7 @@ class MainsController < ApplicationController
         page['h' + heading_id.to_s + '_id'] = heading.id
         page.save
         next
-        end
+      end
       if key.include? '_meta'
         page_id = ''
         key.each_char { |c|
@@ -349,35 +308,36 @@ class MainsController < ApplicationController
     redirect_to '/show_overview'
   end
 
+  # Find or create a new topic from post data
   def new_topic
   	puts params
-  	@topic = Industry.find(params[:industry_id]).topics.create(name:params[:name])
+  	@topic = Industry.find(params[:industry_id]).topics.find_or_create_by(name:params[:name])
   	redirect_to '/partial/topics'
-  	# render :nothing => true
   end
 
+  # Find or create a new keyword from post data
   def new_keyword
     puts params
-    @keyword = Topic.find(params[:topic_id]).keywords.create(keyword:params[:keyword])
-    # respond_to do |format|
-    #   msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
-    #   format.json  { render :json => msg } # don't do msg.to_json
-    # end
+    @keyword = Topic.find(params[:topic_id]).keywords.find_or_create_by(keyword:params[:keyword])
     redirect_to '/partial/keywords'
   end
 
+  # Find or create a new heading from post data
   def new_heading
     puts params
-    @heading = Keyword.find(params[:keyword_id]).headings.create(heading:params[:heading])
+    @heading = Keyword.find(params[:keyword_id]).headings.find_or_create_by(heading:params[:heading])
     redirect_to '/partial/headings'
   end
 
+  # Find or create a new meta description from post data
   def new_meta
     puts params
-    @meta = Topic.find(params[:topic_id]).metas.create(description:params[:description])
+    @meta = Topic.find(params[:topic_id]).metas.find_or_create_by(description:params[:description])
     redirect_to '/partial/metas'
   end
 
+  # Generic handler for 'new' AJAX calls
+  # Refreshes the content for the appropriate page to reflect newly added content
   def partial
     puts 'in partial'
     @pages = Template.find(session[:current_template_id]).pages

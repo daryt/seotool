@@ -10,7 +10,7 @@
 			<% @pages.each do |page| %>
 
 			<div class='form-group'>
-				<label class='col-sm-1 control-label'>Topic</label>
+				<label class='col-sm-1 control-label'><a href='/sitemap'>Topic</a></label>
 				<div class="col-sm-6">
 					<%= text_field_tag(page.id.to_s + '_topic', Topic.find(page.topic_id).name, class: "topic-input form-control") %>
 				</div>
@@ -19,28 +19,29 @@
 				<% for i in 1..3 %>
 
 					<div class='form-group'>
-						<label class='col-sm-2 control-label'>Keyword <%= i %></label>
+						<label class='col-sm-2 control-label'><a href='/show_keywords'>Keyword <%= i %></a></label>
 						<div class="col-sm-6">
 							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_keyword', Keyword.find(page['k' + i.to_s + '_id']).keyword, class: "subdivision-input form-control") %>
 						</div>
 					</div>
 
 					<div class='form-group'>
-						<label class='col-sm-2 control-label'>Heading <%= i %></label>
+						<label class='col-sm-2 control-label'><a href='/show_headings'>Heading <%= i %></a></label>
 						<div class="col-sm-6">
-							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_heading', Heading.find(page['h' + i.to_s + '_id']).heading, class: "subdivision-input form-control") %>
+							<% heading = page['h' + i.to_s + '_id'] && !Heading.where(:id => page['h' + i.to_s + '_id']).empty? ? Heading.find(page['h' + i.to_s + '_id']).heading : '' %>
+							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_heading', heading, class: "subdivision-input form-control") %>
 						</div>
 					</div>
 
 				<% end %>
 
 				<div class='form-group'>
-					<label class='col-sm-2 control-label'>Meta Description</label>
+					<label class='col-sm-2 control-label'><a href='/show_metas'>Meta Description</a></label>
 					<div class="col-sm-6">
 						<%= text_field_tag(page.id.to_s + '_meta', Meta.find(page.meta_id).description, class: "subdivision-input form-control") %>
 					</div>
 				</div>
-				
+
 			<% end %>
 
 			<%= submit_tag("Save Draft", class:"btn btn-primary") %>

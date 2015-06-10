@@ -37,13 +37,10 @@ $(document).on('click','.new-meta-confirm',function(){
 
 	console.log(formData,topicID);
 
-	// $('#confirm').html('<img src="/images/ajax-loader.gif" alt="ajax spinner"/>');
-
 	$('#confirm').html('<%= image_tag "ajax-loader.gif" %>');
 
 	$.ajax({
 	    url : '/metas/new', //Target URL for JSON file
-	    // contentType: 'application/json',
 	    method: 'POST',
 	    data: {'description':formData, 'topic_id':topicID},
 	    success : function(data){

@@ -18,13 +18,16 @@
 			</ul>
 		</li>
 		<% end %>
-		<li>
-			<input id='new-topic-name' type='text'>
-			<button id='new-topic-submit'>Add Topic</button>
-		</li>
 		</ul>
 	</div>
-	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
+
+</div>
+<div class='form-group'>
+	<input id='new-topic-name' type='text'>
+	<button id='new-topic-submit'>Add Topic</button>
+</div>
+<div>
+<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
 </div>
 
 <% end %>

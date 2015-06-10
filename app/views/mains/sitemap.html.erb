@@ -16,7 +16,11 @@
 </div>
 <script>
 $(document).ready(function(){
+	$('label.tree-toggler').parent().children('ul.tree').toggle();
+});
 
+$(document).on('click','label.tree-toggler',function(){
+	$(this).parent().children('ul.tree').toggle(300);
 });
 
 $(document).on('click','#new-topic-submit',function(){
@@ -43,7 +47,7 @@ $(document).on('click','#new-topic-confirm',function(){
 	    method: 'POST',
 	    data: {'name':topicData, 'industry_id':'<%= @industry[:id] %>'},
 	    success : function(data){
-	        $('#confirm').html('success');
+	        $('#confirm').html('Success!');
 	    },
 	    error : function(xhr, status){
 	        console.log(status);
