@@ -1,0 +1,123 @@
+
+
+<div class="row col-md-offset-1 col-md-6">
+  <div class="row">
+    <h1>Add a New SEO Template</h1>
+    <p>Complete the form to add a new template to the database</p>
+  </div>
+  <div class="form-group">
+   <form action="/bulk" method="post">
+    <div class="form-group">
+      <label for="bulk[customer]">Customer</label>
+      <select class="customer1" name="bulk[customer]">
+        <option value="new customer">New Customer</option>
+        <%= @customers.each do |customer| %>
+          <option class="customer1" value="<%= customer.id %>"><%= customer.name %></option>
+          <% end %>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="bulk[customer]">New Customer</label>
+      <input type="string" class="form-control" id="customer" placeholder="Customer" name="bulk[customer]"> 
+    </div>
+
+    <div class="form-group">
+      <label for="bulk[template]">Template</label>
+      <select class="template1" name="bulk[template]">
+        <option value="new template">New Template</option>
+        <%= @templates.each do |template| %>
+          <option class="template1" value="<%= template.id %>"><%= template.name %></option>
+          <% end %>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="bulk[template]">New Template</label>
+      <input type="string" class="form-control" id="template" placeholder="Customer" name="bulk[template]"> 
+    </div>
+
+
+    <div class="form-group">
+      <label for="bulk[industry]">Industry</label>
+      <select class="industry1" name="bulk[industry]">
+        <option value="new industry">New Industry</option>
+        <%= @industries.each do |industry| %>
+          <option class="industry1" value="<%= industry.id %>"><%= industry.name %></option>
+          <% end %>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="bulk[industry]">Industry</label>
+      <input type="string" class="form-control" id="industry" placeholder="Industry" name="bulk[industry]"> 
+    </div>
+    <div class="form-group">
+      <label for="bulk[topic]">Topic</label>
+      <select class="topic1" name="bulk[topic]">
+        <option class="topic1" value="new topic">New Topic</option>
+        <%= @topics.each do |topic| %>
+          <option value="<%= topic.id %>"><%= topic.name %></option>
+          <% end %>
+        </select>
+    </div>
+      <div class="form-group">
+      <label for="bulk[topic]">Topic</label>
+      <input type="string" class="form-control" placeholder="Topic" id="topic" name="bulk[topic]">
+    </div>
+    <div class="form-group">
+      <label for="bulk[keyword1]">Keyword 1</label>
+      <input type="string" class="form-control" placeholder="Keyword 1" name="bulk[keyword1]">
+    </div>
+     <div class="form-group">
+      <label for="bulk[keyword2]">Keyword 2</label>
+      <input type="string" class="form-control" placeholder="Keyword 2" name="bulk[keyword2]">
+    </div>
+     <div class="form-group">
+      <label for="bulk[keyword3]">Keyword 3</label>
+      <input type="string" class="form-control" placeholder="Keyword 3" name="bulk[keyword3]">
+    </div>
+    <div class="form-group">
+      <label for="bulk[heading1]">Heading 1</label>
+      <input type="string" class="form-control" placeholder="Heading 1" name="bulk[heading1]">
+    </div>
+     <div class="form-group">
+      <label for="bulk[heading2]">Heading 2</label>
+      <input type="string" class="form-control" placeholder="Heading 2" name="bulk[heading2]">
+    </div>
+     <div class="form-group">
+      <label for="bulk[heading3]">Heading 3</label>
+      <input type="string" class="form-control" placeholder="Heading 3" name="bulk[heading3]">
+    </div>
+    <div class="form-group">
+      <label for="bulk[meta]">Meta Description</label>
+      <input type="string" class="form-control" placeholder="Meta Description" name="bulk[meta]">
+    </div>
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input type="submit" class="btn btn-default" value="Create">
+    </form>
+  </div>
+
+  <script>
+  $(".customer1").change(function() {
+    customer = $("select.customer1 option:selected").text();
+    $("#customer").val(customer);
+    console.log(customer)
+  });
+  
+  $(".template1").change(function() {
+    template = $("select.template1 option:selected").text();
+    $("#template").val(template);
+    console.log(template)
+  });
+
+
+  $(".industry1").change(function() {
+    industry = $("select.industry1 option:selected").text();
+    $("#industry").val(industry);
+    console.log(industry)
+  });
+
+   $(".topic1").change(function() {
+    topic = $("select.topic1 option:selected").text();
+    $("#topic").val(topic);
+    console.log(topic)
+  });
+</script>

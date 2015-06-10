@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150521152234) do
+ActiveRecord::Schema.define(version: 20150527183754) do
+
+  create_table "customers", force: true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "headings", force: true do |t|
     t.string   "heading"
@@ -83,7 +90,10 @@ ActiveRecord::Schema.define(version: 20150521152234) do
     t.datetime "updated_at"
     t.string   "status",      default: "draft"
     t.integer  "industry_id"
+    t.integer  "customer_id"
   end
+
+  add_index "templates", ["customer_id"], name: "index_templates_on_customer_id"
 
   create_table "topics", force: true do |t|
     t.string   "name"
