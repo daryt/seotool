@@ -281,6 +281,124 @@ class MainsController < ApplicationController
     end
   end
 
+  def bulk
+    @industries = Industry.all
+    @topics = Topic.all
+    @customers = Customer.all
+    @templates = Template.all
+  end
+  def bulk_template # this is for the bulk input form
+    
+    industryCheck = Industry.where(name: bulk_params[:industry]).pluck(:id).first
+    if industryCheck.nil?
+      newIndustry = Industry.create(name: bulk_params[:industry])
+      industry = newIndustry.id
+    else
+      industry = industryCheck
+    end
+
+    topicCheck = Industry.find(industry).topics.where(name: bulk_params[:topic]).pluck(:id).first
+    if topicCheck.nil?
+      newTopic = Industry.find(industry).topics.create(name: bulk_params[:topic])
+      topic = newTopic.id
+    else
+      topic = topicCheck
+    end
+
+    #topic = Topic.create(name: bulk_params[:topic], industry_id: industry)
+
+     
+    keyword1Check = Topic.find(topic).keywords.where(keyword: bulk_params[:keyword1]).pluck(:id).first
+      if keyword1Check.nil?
+        newKeyword = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword1])
+        keyword1= newKeyword.id
+      else
+        keyword1 = keyword1Check
+    end
+
+     keyword2Check = Topic.find(topic).keywords.where(keyword: bulk_params[:keyword2]).pluck(:id).first
+      if keyword2Check.nil?
+        newKeyword = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword2])
+        keyword2= newKeyword.id
+      else
+        keyword2 = keyword2Check
+    end
+
+     keyword3Check = Topic.find(topic).keywords.where(keyword: bulk_params[:keyword3]).pluck(:id).first
+      if keyword3Check.nil?
+        newKeyword = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword3])
+        keyword3= newKeyword.id
+      else
+        keyword3 = keyword3Check
+    end
+
+
+    # keyword1 = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword1])
+    # keyword2 = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword2])
+    # keyword3 = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword3])
+
+      heading1Check = Keyword.find(keyword1).headings.where(heading: bulk_params[:heading1]).pluck(:id).first
+      if heading1Check.nil?
+        newHeading = Keyword.find(keyword1).headings.create(heading: bulk_params[:heading1])
+        heading1= newHeading.id
+      else
+        heading1 = heading1Check
+    end
+
+      heading2Check = Keyword.find(keyword2).headings.where(heading: bulk_params[:heading2]).pluck(:id).first
+      if heading2Check.nil?
+        newHeading = Keyword.find(keyword2).headings.create(heading: bulk_params[:heading2])
+        heading2= newHeading.id
+      else
+        heading2 = heading2Check
+    end
+
+      heading3Check = Keyword.find(keyword3).headings.where(heading: bulk_params[:heading3]).pluck(:id).first
+      if heading3Check.nil?
+        newHeading = Keyword.find(keyword3).headings.create(heading: bulk_params[:heading3])
+        heading3= newHeading.id
+      else
+        heading3 = heading3Check
+    end
+
+    # heading1 = Keyword.find(keyword1).headings.create(heading: bulk_params[:heading1])
+    # heading2 = Keyword.find(keyword2).headings.create(heading: bulk_params[:heading2])
+    # heading3 = Keyword.find(keyword3).headings.create(heading: bulk_params[:heading3])
+    
+
+    metaCheck = Topic.find(topic).metas.where(description: bulk_params[:meta]).pluck(:id).first
+      if metaCheck.nil?
+        newMeta = Topic.find(topic).metas.create(description: bulk_params[:meta])
+        meta = newMeta.id
+      else
+        meta = metaCheck
+    end
+
+    # meta = Topic.find(topic).metas.create(description: bulk_params[:meta])
+    page = Page.create(topic_id: topic, k1_id: keyword1, k2_id: keyword2, k3_id: keyword3, h1_id: heading1, h2_id: heading2, h3_id: heading3, meta_id: meta)
+    
+    customerCheck = Customer.where(name: bulk_params[:customer]).pluck(:id).first
+    if customerCheck.nil?
+      newCustomer = Customer.create(name: bulk_params[:customer])
+      customer = newCustomer.id
+    else
+      customer = customerCheck
+    end
+
+    templateCheck = Customer.find(customer).templates.where(name: bulk_params[:template]).pluck(:id).first
+    if templateCheck.nil?
+      newTemplate = Customer.find(customer).templates.create(name: bulk_params[:template], industry_id: industry)
+      template = newTemplate.id
+    else
+      template = templateCheck
+    end
+
+
+
+
+    redirect_to '/bulk_form'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_template
@@ -292,4 +410,11 @@ class MainsController < ApplicationController
       params.require(:template).permit(:industry_id, :name)
     end
 
+    def bulk_params
+      params.require(:bulk).permit(:industry, :topic, :keyword1, :keyword2, :keyword3, :heading1, :heading2, :heading3, :meta, :customer, :template)
+    end
+
 end
+
+
+# I also need to verify the associations...for example, if a keyword is entered once, can I use it for all things?

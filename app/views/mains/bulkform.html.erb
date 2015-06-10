@@ -1,0 +1,29 @@
+<div class="row col-md-offset-1 col-md-6">
+  <div class="row">
+    <h1>Add a New Website</h1>
+    <p>Complete the form to add a new website and check</p>
+  </div>
+  <div class="form-group">
+   <form action="/websites" method="post">
+    <div class="form-group">
+      <label for="website[url]">URL</label>
+      <input type="string" class="form-control" placeholder="http://www.domain.com" name="website[url]">
+    </div>
+    <div class="form-group">
+      <label for="website[name]">Website Name</label>
+      <input type="string" class="form-control" placeholder="Example Site" name="website[name]">
+    </div>
+    <div class="form-group">
+      <label for="website[check_frequency]">Check Frequency</label>
+      <input type="integer" class="form-control" placeholder="Time in Minutes" name="website[check_frequency]">
+    </div>
+    <div class="form-group">
+      <label for="website[keyword]">Search Keyword</label>
+      <input type="string" class="form-control" placeholder="Enter Keyword to Find on Page" name="website[keyword]">
+    </div>
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input type="submit" class="btn btn-default" value="Create">
+    </form>
+  </div>
+  <p><a href="/websites"><button type="button" class="btn btn-primary">Back</button></a></p>
+</div>
