@@ -3,24 +3,37 @@
 
 		<h1>Select your industry</h1>
 
-		<%= form_for(@template, html: {class: 'form-horizontal'}) do |f| %>
+		<%= form_tag('/templates/', method:'post', class: 'form-horizontal') do %>
 
 		<div class="form-group">
-			<%= f.label :industry, class: "col-sm-2 control-label" %>
-			<div class="col-sm-6">
-				<%= f.select :industry_id, Industry.all.collect {|p| [p.name, p.id]}, {}, class: "form-control" %>
+			<%= label_tag 'Customer',nil, class: "col-sm-2 control-label" %>
+			<div class="col-sm-4">
+				<%= select_tag("template[customer_id]", options_for_select(Customer.all.collect {|p| [p.name, p.id]} + ['New Customer']), :include_blank => 'Please select a customer', class: "form-control") %>
+			</div>
+			<div class='col-sm-4' id='new-customer-field' style='display:none'>
+				<%= text_field_tag :new_customer, nil, class: "form-control", required: false %>
 			</div>
 		</div>
 
 		<div class="form-group">
-	        <%= f.label :template_name, class: "col-sm-2 control-label" %>
-	        <div class="col-sm-6">
-	          <%= f.text_field :name, class: "form-control", required: true %>
+			<%= label_tag 'Industry', nil, class: "col-sm-2 control-label" %>
+			<div class="col-sm-4">
+				<%= select_tag("template[industry_id]", options_for_select(Industry.all.collect {|p| [p.name, p.id]} + ['New Industry']), :include_blank => 'Please select an industry', class: "form-control") %>
+			</div>
+			<div class='col-sm-4' id='new-industry-field' style='display:none'>
+				<%= text_field_tag :new_industry, nil, class: "form-control", required: false %>
+			</div>
+		</div>
+
+		<div class="form-group">
+	        <%= label_tag 'Template name',nil, class: "col-sm-2 control-label" %>
+	        <div class="col-sm-4">
+	          <%= text_field_tag("template[name]", nil, class: "form-control", required: true) %>
 	        </div>
 	    </div>
 
-		<div class="actions col-sm-6 col-sm-offset-2" style='padding:5px'>
-		  	<%= f.submit "Create",class:"btn btn-success" %>
+		<div class="actions col-sm-4 col-sm-offset-2" style='padding:5px'>
+		  	<%= submit_tag "Create",class:"btn btn-success" %>
 		</div>
 
 		<% end %>
@@ -35,17 +48,37 @@
 
 		<div class="form-group">
 			<%= label_tag 'Template name', nil, class: "col-sm-2 control-label" %>
-			<div class='col-sm-6'>
+			<div class='col-sm-4'>
 				<%= select_tag(:id, options_for_select(@templates.collect {|p| [p.name, p.id]}), class: "form-control") %>
 			</div>
 		</div>
 
-		<div class="actions col-sm-6 col-sm-offset-2" style='padding:5px'>
+		<div class="actions col-sm-4 col-sm-offset-2" style='padding:5px'>
 			<%= submit_tag("Select", class:"btn btn-primary") %>
 		</div>
 
 		<% end %>
 
 	</div>
-
 </div>
+
+<script>
+// Show new customer creation field if appropriate option selected
+$( "#template_customer_id" ).change(function() {
+    if ($( "#template_customer_id option:selected" ).text() == 'New Customer')
+    {
+    	$('#new-customer-field').show();
+    }else{
+    	$('#new-customer-field').hide();
+    }
+});
+// Show new industry creation field if appropriate option selected
+$( "#template_industry_id" ).change(function() {
+    if ($( "#template_industry_id option:selected" ).text() == 'New Industry')
+    {
+    	$('#new-industry-field').show();
+    }else{
+    	$('#new-industry-field').hide();
+    }
+});
+</script>

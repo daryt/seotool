@@ -9,16 +9,32 @@
 class MainsController < ApplicationController
 
   def index
-  	@template = Template.new
+  	# @template = Template.new
   	@templates = Template.where(status: 'draft')
   end
 
   # Create a new template and render the sitemap with default info
   def new_template
-    @template = Template.new(template_params)
+
+
+    customer_id = template_params[:customer_id]
+    industry_id = template_params[:industry_id]
+
+    if template_params[:customer_id] == 'New Customer'
+      customer = Customer.create(name:params[:new_customer])
+      customer_id = customer.id
+    end
+    if template_params[:industry_id] == 'New Industry'
+      puts params
+      industry = Industry.create(name:params[:new_industry])
+      industry_id = industry.id
+    end
+
+    @template = Template.new(name:template_params[:name],industry_id:industry_id,customer_id:customer_id)
+
     if @template.save
-        puts template_params
-        @industry = Industry.find(template_params[:industry_id])
+        # puts template_params
+        @industry = Industry.find(industry_id)
         @topics = @industry.topics
         @pages = @template.pages
         session[:current_template_id] = @template[:id]
@@ -359,7 +375,7 @@ class MainsController < ApplicationController
     @templates = Template.all
   end
   def bulk_template # this is for the bulk input form
-    
+
     industryCheck = Industry.where(name: bulk_params[:industry]).pluck(:id).first
     if industryCheck.nil?
       newIndustry = Industry.create(name: bulk_params[:industry])
@@ -378,7 +394,7 @@ class MainsController < ApplicationController
 
     #topic = Topic.create(name: bulk_params[:topic], industry_id: industry)
 
-     
+
     keyword1Check = Topic.find(topic).keywords.where(keyword: bulk_params[:keyword1]).pluck(:id).first
       if keyword1Check.nil?
         newKeyword = Topic.find(topic).keywords.create(keyword: bulk_params[:keyword1])
@@ -435,7 +451,7 @@ class MainsController < ApplicationController
     # heading1 = Keyword.find(keyword1).headings.create(heading: bulk_params[:heading1])
     # heading2 = Keyword.find(keyword2).headings.create(heading: bulk_params[:heading2])
     # heading3 = Keyword.find(keyword3).headings.create(heading: bulk_params[:heading3])
-    
+
 
     metaCheck = Topic.find(topic).metas.where(description: bulk_params[:meta]).pluck(:id).first
       if metaCheck.nil?
@@ -446,8 +462,8 @@ class MainsController < ApplicationController
     end
 
     # meta = Topic.find(topic).metas.create(description: bulk_params[:meta])
-  
-    
+
+
     customerCheck = Customer.where(name: bulk_params[:customer]).pluck(:id).first
     if customerCheck.nil?
       newCustomer = Customer.create(name: bulk_params[:customer])
@@ -480,7 +496,7 @@ class MainsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def template_params
-      params.require(:template).permit(:industry_id, :name)
+      params.require(:template).permit(:industry_id, :customer_id, :name)
     end
 
     def bulk_params

@@ -5,7 +5,7 @@
 
 		<h2>Industry: <%= @industry.name %></h2>
 
-		<%= form_tag("/update_overview/", method: "post", class: "form-horizontal") do %>
+		<%= form_tag("/update_overview/", method: "post", class: "form-horizontal form-data") do %>
 
 			<% @pages.each do |page| %>
 
@@ -21,7 +21,8 @@
 					<div class='form-group'>
 						<label class='col-sm-2 control-label'><a href='/show_keywords'>Keyword <%= i %></a></label>
 						<div class="col-sm-6">
-							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_keyword', Keyword.find(page['k' + i.to_s + '_id']).keyword, class: "subdivision-input form-control") %>
+							<% keyword = page['k' + i.to_s + '_id'] && !Keyword.where(:id => page['k' + i.to_s + '_id']).empty? ? Keyword.find(page['k' + i.to_s + '_id']).keyword : '' %>
+							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_keyword', keyword, class: "subdivision-input form-control") %>
 						</div>
 					</div>
 
@@ -38,17 +39,80 @@
 				<div class='form-group'>
 					<label class='col-sm-2 control-label'><a href='/show_metas'>Meta Description</a></label>
 					<div class="col-sm-6">
-						<%= text_field_tag(page.id.to_s + '_meta', Meta.find(page.meta_id).description, class: "subdivision-input form-control") %>
+						<% meta = page['meta_id'] && !Meta.where(:id => page['meta_id']).empty? ? Meta.find(page.meta_id).description : '' %>
+						<%= text_field_tag(page.id.to_s + '_meta', meta, class: "subdivision-input form-control") %>
 					</div>
 				</div>
 
 			<% end %>
 
-			<%= submit_tag("Save Draft", class:"btn btn-primary") %>
+			<div id='confirm'>
+			</div>
+
+			<%= submit_tag("Save Draft", class:"btn btn-primary validate-fields") %>
 
 			<%= submit_tag("Save and Publish", class:"btn btn-primary") %>
 
 		<% end %>
 
 	</div>
+
 </div>
+
+<script>
+// Perform client-side validations to ensure they aren't trying to use dupe keywords per topic
+$(document).on('click','.validate-fields',function(){
+
+	var formData = $('.form-data').serializeObject();
+
+	var keyword_ids = {};
+
+	$.each(formData, function(key,value){
+		if (key.indexOf('keyword') != -1)
+		{
+			// First, get the topic id and the keyword count of this keyword
+			// Then, let's compare against the other keywords with the same topic id
+			var topic_id = '';
+			for (var i=0;i<key.length;i++)
+			{
+				if (key[i] != '_')
+				{
+					topic_id += key[i];
+				}else{
+					break;
+				}
+			}
+			$.each(formData, function(key2,value2){
+				if (key2.indexOf('keyword') != -1 && key != key2)
+				{
+					var topic_id_compare = '';
+					var keyword_count = '';
+					for (var i=0;i<key2.length;i++)
+					{
+						if (key2[i] != '_')
+						{
+							topic_id_compare += key2[i];
+						}else{
+							if (topic_id == topic_id_compare && value == value2)
+							{
+								keyword_ids[key] = "duplicate value";
+							}
+							break;
+						}
+					}
+				}
+			});
+		}
+	});
+
+	if (Object.keys(keyword_ids).length > 0)
+	{
+		// alert('duplicate keyword ids found');
+		$('#confirm').fadeOut(200, function(){
+			$('#confirm').html('<h3 class="warning">Duplicate keywords detected!</h3><p>Please ensure each topic has three UNIQUE keywords</p>');
+			$('#confirm').fadeIn(300);
+		});
+		return false;
+	}
+});
+</script>
