@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150611195901) do
+ActiveRecord::Schema.define(version: 20150616203523) do
+
+  create_table "cities", force: true do |t|
+    t.string   "name"
+    t.integer  "state_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cities", ["state_id"], name: "index_cities_on_state_id"
 
   create_table "customers", force: true do |t|
     t.string   "name"
@@ -82,6 +91,19 @@ ActiveRecord::Schema.define(version: 20150611195901) do
     t.integer  "meta_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "page_title"
+    t.string   "url"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "city_id"
+    t.integer  "state_id"
+  end
+
+  create_table "states", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "abbrev"
   end
 
   create_table "templates", force: true do |t|

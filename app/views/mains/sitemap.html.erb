@@ -1,6 +1,6 @@
 <div class='container'>
 	<div class='row'>
-		<div class ='col-md-6' id='dynamic-content'>
+		<div class ='col-xs-6' id='dynamic-content'>
 		</div>
 		<!-- load the partial content that will refresh via ajax -->
 		<script>
@@ -8,7 +8,7 @@
 			$('#dynamic-content').html(url);
 		</script>
 
-		<div class ='col-md-6'>
+		<div class ='col-xs-6'>
 			<div id='confirm'>
 			</div>
 		</div>
@@ -32,6 +32,14 @@ $(document).on('click','#new-topic-submit',function(){
 });
 
 $(document).on('click','#new-topic-confirm',function(){
+
+	var formData = $('.form-horizontal').serializeObject();
+
+    $.ajax({
+	  type: "POST",
+	  url: '/update_topics/',
+	  data: formData
+	});
 
 	var topicData = $('#new-topic-confirm').attr('value');
 

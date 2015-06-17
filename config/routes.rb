@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   # resources :industries
 
   # post '/overview/' => 'mains#post_overview'
+  get '/export_template' => 'mains#export_template', as: 'export'
+
   post '/retrieve_overview/' => 'mains#retrieve_overview'
   get '/show_overview' => 'mains#show_overview'
   post '/update_overview' => 'mains#update_overview'

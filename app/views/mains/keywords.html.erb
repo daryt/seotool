@@ -16,15 +16,15 @@
 </div>
 <script>
 $(document).ready(function(){
-
-
 });
 
+$(document).on('change','.keyword-option',function(){
+});
 
 // Perform client-side validations to ensure they aren't trying to use dupe keywords per topic
 $(document).on('click','.validate-fields',function(){
 
-	var formData = $('.form-data').serializeObject();
+	var formData = $('.form-horizontal').serializeObject();
 
 	var keyword_ids = {};
 
@@ -89,7 +89,22 @@ $(document).on('click','.new-keyword-submit',function(){
 
 $(document).on('click','.new-keyword-confirm',function(){
 
-	var formData = $(this).attr('value');
+	// Save selections so that they remain when the user creates a new keyword
+
+    // One option: save to database every time the user clicks 'add keyword'
+    // Warning 1: the user will be able to save duplicates in this manner
+    // Warning 2: this code sends a post request, but expects no response? Investigate
+
+	var formData = $('.form-horizontal').serializeObject();
+    // console.log(formData);
+
+    $.ajax({
+	  type: "POST",
+	  url: '/update_keywords/',
+	  data: formData
+	});
+
+	formData = $(this).attr('value');
 	var topicID = $(this).attr('data-topic-id');
 
 	console.log(formData,topicID);

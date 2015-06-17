@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <ss:Column ss:Width="120"/>
+      <ss:Column ss:Width="120"/>
+      <% @pages.each do |page| %>
+        <Row>
+          <Cell><Data ss:Type="String">Page: <%= Topic.find(page.topic_id).name %></Data></Cell>
+          <Cell><Data ss:Type="String"></Data></Cell>
+        </Row>
+        <Row>
+          <Cell><Data ss:Type="String">Page Title</Data></Cell>
+          <% page_title = page.page_title; page_title.gsub! '(*city*)', City.find(page.city_id).name; page_title.gsub! '(*state*)', State.find(page.state_id).abbrev; %>
+          <Cell><Data ss:Type="String"><%= page_title %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell><Data ss:Type="String">Meta Description</Data></Cell>
+          <Cell><Data ss:Type="String"><%= Meta.find(page.meta_id).description %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell><Data ss:Type="String">H1</Data></Cell>
+          <Cell><Data ss:Type="String"><%= Heading.find(page.h1_id).heading %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell><Data ss:Type="String">H2</Data></Cell>
+          <Cell><Data ss:Type="String"><%= Heading.find(page.h2_id).heading %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell><Data ss:Type="String">H3</Data></Cell>
+          <Cell><Data ss:Type="String"><%= Heading.find(page.h3_id).heading %></Data></Cell>
+        </Row>
+        <Row>
+          <Cell><Data ss:Type="String">URL</Data></Cell>
+          <% url = page.url; url.gsub! '(*city*)', City.find(page.city_id).name; url.gsub! '(*state*)', State.find(page.state_id).abbrev; %>
+          <Cell><Data ss:Type="String"><%= url %></Data></Cell>
+        </Row>
+        <Row>
+        </Row>
+      <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

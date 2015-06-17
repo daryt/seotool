@@ -1,6 +1,6 @@
 <h1>Select Headings Per Keyword Per Topic</h1>
 
-<%= form_tag("/update_headings/", method: "post", class: "") do %>
+	<%= form_tag("/update_headings/", method: "post", class: "form-horizontal") do %>
 
 	<% @pages.each do |page| %>
 
@@ -14,7 +14,7 @@
 			<p>Keyword: <%= Keyword.find(keyword_id).keyword %></p>
 
 			<div class="form-group">
-			<%= select_tag(page.topic_id.to_s  + '_' + i.to_s + "_heading", options_for_select(Keyword.find(keyword_id).headings.collect {|p| [p.heading, p.id]}, selected: page['h' + i.to_s + '_id'], class: "col-sm-2 control-label")) %>
+			<%= select_tag(page.topic_id.to_s  + '_' + i.to_s + "_heading", options_for_select(Keyword.find(keyword_id).headings.collect {|p| [p.heading, p.id]}, selected: page['h' + i.to_s + '_id']), class: "form-control") %>
 			</div>
 
 			<div class='form-group'>

@@ -16,7 +16,6 @@ class MainsController < ApplicationController
   # Create a new template and render the sitemap with default info
   def new_template
 
-
     customer_id = template_params[:customer_id]
     industry_id = template_params[:industry_id]
 
@@ -207,6 +206,33 @@ class MainsController < ApplicationController
     @industry = Industry.find(@template.industry_id)
     @pages = @template.pages
 
+    # For each page:
+    # If there is no page title or URL, create a standard one
+    # If there is no state_id, default to Washington (placeholder: this may be done in the model)
+    @pages.each do |page|
+      if !page['page_title'].present?
+        if !page['k1_id'].present? && !page['k2_id'].present? && !page['k3_id'].present?
+          puts 'not all keywords present'
+        else
+          page['page_title'] = Keyword.find(page['k1_id']).keyword + ' (*city*) (*state*) | ' + Keyword.find(page['k2_id']).keyword + ' (*city*) | ' + Keyword.find(page['k3_id']).keyword
+          page.save
+        end
+      end
+      if !page['url'].present?
+        if !page['k1_id'].present?
+          puts 'first keyword not present'
+        else
+          page['url'] = Keyword.find(page['k1_id']).keyword.downcase + '-(*city*)-(*state*)'
+          page.save
+        end
+      end
+      if !page['state_id'].present?
+        puts 'creating state id'
+        page['state_id'] = State.where(name: 'Washington').first.id
+        page.save
+      end
+    end
+
     render :overview
   end
 
@@ -217,6 +243,10 @@ class MainsController < ApplicationController
 
     # Go through every input field and create/update as needed
     params.each do |key,val|
+      # Skip any empty fields - the user can have blanks on the final edit page
+      if !val.present?
+        next
+      end
       if key.include?'_topic'
         puts 'value: ' + val
         page_id = ''
@@ -319,9 +349,94 @@ class MainsController < ApplicationController
         page.save
         next
       end
+      if key.include? '_pagetitle'
+        page_id = ''
+        key.each_char { |c|
+          if c != '_'
+            page_id += c
+          else
+            break
+          end
+        }
+        page = template.pages.find(page_id)
+        puts page_id + ' page_id'
+        val.strip!
+        puts page.page_title
+        page.update(page_title: val)
+        next
+      end
+      if key.include? '_url'
+        page_id = ''
+        key.each_char { |c|
+          if c != '_'
+            page_id += c
+          else
+            break
+          end
+        }
+        page = template.pages.find(page_id)
+        puts page_id + ' page_id'
+        val.strip!
+        puts page.page_title
+        page.update(url: val)
+        next
+      end
+      if key.include? '_state_id'
+        puts key
+        page_id = ''
+        key.each_char { |c|
+          if c != '_'
+            page_id += c
+          else
+            break
+          end
+        }
+        page = template.pages.find(page_id)
+        if val == 'New State'
+          new_state = params[page_id.to_s + '_new_state']
+          new_state.strip!
+          next if !new_state.present?
+          state = State.find_or_create_by(name:new_state)
+        end
+        page.update(state_id: state.present? ? state.id : val)
+        next
+      end
+      if key.include? '_city_id'
+        puts key
+        page_id = ''
+        key.each_char { |c|
+          if c != '_'
+            page_id += c
+          else
+            break
+          end
+        }
+        page = template.pages.find(page_id)
+        if val == 'New City'
+
+          new_city = params[page_id.to_s + '_new_city']
+          new_city.strip!
+          next if !new_city.present?
+          puts "attempting to add new city"
+          city = State.find(page.state_id).cities.find_or_create_by(name:new_city)
+        end
+        page.update(city_id: city.present? ? city.id : val)
+        next
+      end
     end
 
     redirect_to '/show_overview'
+  end
+
+  def export_template
+    @template = Template.find(session[:current_template_id])
+    # @industry = Industry.find(@template.industry_id)
+    @pages = @template.pages
+    puts 'attempting to send data'
+    respond_to do |format|
+      format.csv { send_data @pages.to_csv }
+      format.xls # { send_data @products.to_csv(col_sep: "\t") }
+    end
   end
 
   # Find or create a new topic from post data

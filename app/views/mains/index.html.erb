@@ -63,22 +63,25 @@
 </div>
 
 <script>
-// Show new customer creation field if appropriate option selected
-$( "#template_customer_id" ).change(function() {
-    if ($( "#template_customer_id option:selected" ).text() == 'New Customer')
-    {
-    	$('#new-customer-field').show();
-    }else{
-    	$('#new-customer-field').hide();
-    }
-});
-// Show new industry creation field if appropriate option selected
-$( "#template_industry_id" ).change(function() {
-    if ($( "#template_industry_id option:selected" ).text() == 'New Industry')
-    {
-    	$('#new-industry-field').show();
-    }else{
-    	$('#new-industry-field').hide();
-    }
+$(document).ready(function(){
+
+	// Show new customer creation field if appropriate option selected
+	$( "#template_customer_id" ).change(function() {
+	    if ($( "#template_customer_id option:selected" ).text() == 'New Customer')
+	    {
+	    	$('#new-customer-field').show();
+	    }else{
+	    	$('#new-customer-field').hide();
+	    }
+	});
+	// Show new industry creation field if appropriate option selected
+	$( "#template_industry_id" ).change(function() {
+	    if ($( "#template_industry_id option:selected" ).text() == 'New Industry')
+	    {
+	    	$('#new-industry-field').show();
+	    }else{
+	    	$('#new-industry-field').hide();
+	    }
+	});
 });
 </script>

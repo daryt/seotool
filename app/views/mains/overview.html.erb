@@ -44,14 +44,50 @@
 					</div>
 				</div>
 
+				<div class='form-group'>
+					<label class='col-sm-2 control-label'>Page Title</label>
+					<div class="col-sm-6">
+						<%= text_field_tag(page.id.to_s + '_pagetitle', page['page_title'], class: "subdivision-input form-control") %>
+					</div>
+				</div>
+
+				<div class='form-group'>
+					<label class='col-sm-2 control-label'>Page URL</label>
+					<div class="col-sm-6">
+						<%= text_field_tag(page.id.to_s + '_url', page['url'], class: "subdivision-input form-control") %>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<%= label_tag 'State',nil, class: "col-sm-2 control-label" %>
+					<div class="col-sm-4">
+						<%= select_tag(page.id.to_s + '_state_id', options_for_select(State.all.collect {|p| [p.name, p.id]} + ['New State'], selected: page.state_id), class: "form-control state-select-option") %>
+					</div>
+					<div class='col-sm-4' id='new-state-field' style='display:none'>
+						<%= text_field_tag(page.id.to_s + '_new_state', nil, class: "form-control", required: false) %>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<%= label_tag 'City',nil, class: "col-sm-2 control-label" %>
+					<div class="col-sm-4">
+						<%= select_tag(page.id.to_s + '_city_id', options_for_select(State.find(page.state_id).cities.collect {|p| [p.name, p.id]} + ['New City'], selected: page.city_id), class: "form-control city-select-option") %>
+					</div>
+					<div class='col-sm-4' id='new-city-field' style='display:none'>
+						<%= text_field_tag(page.id.to_s + '_new_city', nil, class: "form-control", required: false) %>
+					</div>
+				</div>
+
+
+
 			<% end %>
 
 			<div id='confirm'>
 			</div>
 
-			<%= submit_tag("Save Draft", class:"btn btn-primary validate-fields") %>
+			<%= submit_tag("Save Template", class:"btn btn-primary validate-fields") %>
 
-			<%= submit_tag("Save and Publish", class:"btn btn-primary") %>
+			<%= link_to "Export as Excel", export_path(format: "xls") %>
 
 		<% end %>
 
@@ -60,6 +96,28 @@
 </div>
 
 <script>
+$(document).ready(function(){
+
+	// Show new customer creation field if appropriate option selected
+	$( ".state-select-option" ).change(function() {
+	    if ($("option:selected", this).text() == 'New State')
+	    {
+	    	$(this).parent().siblings('#new-state-field').show();
+	    }else{
+	    	$(this).parent().siblings('#new-state-field').hide();
+	    }
+	});
+	// Show new industry creation field if appropriate option selected
+	$( ".city-select-option" ).change(function() {
+	    if ($("option:selected", this).text() == 'New City')
+	    {
+	    	$(this).parent().siblings('#new-city-field').show();
+	    }else{
+	    	$(this).parent().siblings('#new-city-field').hide();
+	    }
+	});
+});
+
 // Perform client-side validations to ensure they aren't trying to use dupe keywords per topic
 $(document).on('click','.validate-fields',function(){
 
@@ -68,7 +126,8 @@ $(document).on('click','.validate-fields',function(){
 	var keyword_ids = {};
 
 	$.each(formData, function(key,value){
-		if (key.indexOf('keyword') != -1)
+		// Check that this is a keyword field and that is not empty - we don't care about duplicating empty keywords
+		if (key.indexOf('keyword') != -1 && value != '')
 		{
 			// First, get the topic id and the keyword count of this keyword
 			// Then, let's compare against the other keywords with the same topic id

@@ -1,6 +1,6 @@
 <div class='container'>
 	<div class='row'>
-		<div class ='col-md-6' id='dynamic-content'>
+		<div class ='col-xs-6' id='dynamic-content'>
 		</div>
 		<!-- load the partial content that will refresh via ajax -->
 		<script>
@@ -8,7 +8,7 @@
 			$('#dynamic-content').html(url);
 		</script>
 
-		<div class='col-md-6'>
+		<div class='col-xs-6'>
 			<div id='confirm'>
 			</div>
 		</div>
@@ -32,7 +32,22 @@ $(document).on('click','.new-heading-submit',function(){
 
 $(document).on('click','.new-heading-confirm',function(){
 
-	var formData = $(this).attr('value');
+	// Save selections so that they remain when the user creates a new keyword
+
+    // One option: save to database every time the user clicks 'add keyword'
+    // Warning 1: the user will be able to save duplicates in this manner
+    // Warning 2: this code sends a post request, but expects no response? Investigate
+
+	var formData = $('.form-horizontal').serializeObject();
+    // console.log(formData);
+
+    $.ajax({
+	  type: "POST",
+	  url: '/update_headings/',
+	  data: formData
+	});
+
+	formData = $(this).attr('value');
 	var keywordID = $(this).attr('data-keyword-id');
 
 	console.log(formData,keywordID);
