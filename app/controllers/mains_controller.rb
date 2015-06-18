@@ -485,10 +485,19 @@ class MainsController < ApplicationController
 
   def bulk
     @industries = Industry.all
-    @topics = Topic.all
+    # @topics = Topic.all
     @customers = Customer.all
     @templates = Template.all
   end
+
+  def bulk_topics
+    @topics = Industry.where(name: params[:industry]).first.topics
+    # respond_to do |format|
+    #   format.html
+    #   format.js
+    # end    
+  end
+
   def bulk_template # this is for the bulk input form
 
     industryCheck = Industry.where(name: bulk_params[:industry]).pluck(:id).first

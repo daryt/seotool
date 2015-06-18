@@ -1,0 +1,26 @@
+    <div id="topicslist" >
+    <div class="form-group<!-- ">
+      <label for="bulk[topic]">Topic</label>
+      <select class="topic1" name="bulk[topic]">
+        <% if @topics.nil? %>
+        <option class="topic1" value="new topic">New Topic</option>
+        <% elsif %>
+          <%= @topics.each do |topic| %>
+          <option value="<%= topic.id %>"><%= topic.name %></option>
+          <% end %>
+          <% end %>
+        </select>
+    </div>
+  </div>
+<script>
+     $(".topic1").change(function() {
+    topic = $("select.topic1 option:selected").text();
+    $("#topic").val(topic);
+    console.log(topic)
+  });
+    $(".topic1").ready(function() {
+    topic = $("select.topic1 option:selected").text();
+    $("#topic").val(topic);
+    console.log(topic)
+  });
+</script>
