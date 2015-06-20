@@ -488,6 +488,8 @@ class MainsController < ApplicationController
     # @topics = Topic.all
     @customers = Customer.all
     @templates = Template.all
+    @cities = City.all
+    @states = State.all
   end
 
   def bulk_topics
@@ -604,7 +606,25 @@ class MainsController < ApplicationController
       template = templateCheck
     end
 
-    page = Template.find(template).pages.create(topic_id: topic, k1_id: keyword1, k2_id: keyword2, k3_id: keyword3, h1_id: heading1, h2_id: heading2, h3_id: heading3, meta_id: meta)
+    stateCheck = State.where(name: bulk_params[:state]).pluck(:id).first
+    if stateCheck.nil?
+      newState = State.create(name: bulk_params[:state])
+      state = newState.id
+    else
+      state = stateCheck
+    end
+
+     cityCheck = State.find(state).cities.where(name: bulk_params[:city]).pluck(:id).first
+    if cityCheck.nil?
+      newCity = State.find(state).cities.create(name: bulk_params[:city])
+      city = newCity.id
+    else
+      city = cityCheck
+    end
+
+    page = Template.find(template).pages.create(page_title: bulk_params[:title], topic_id: topic, k1_id: keyword1, k2_id: keyword2, k3_id: keyword3, h1_id: heading1, h2_id: heading2, h3_id: heading3, meta_id: meta, url: bulk_params[:url], city_id: city, state_id: state)
+
+    Template.find(template).update(status: "published")
 
 
 
@@ -624,7 +644,7 @@ class MainsController < ApplicationController
     end
 
     def bulk_params
-      params.require(:bulk).permit(:industry, :topic, :keyword1, :keyword2, :keyword3, :heading1, :heading2, :heading3, :meta, :customer, :template)
+      params.require(:bulk).permit(:title, :industry, :topic, :keyword1, :keyword2, :keyword3, :heading1, :heading2, :heading3, :meta, :customer, :template, :url, :city, :state)
     end
 
 end

@@ -56,6 +56,10 @@
       <input type="string" class="form-control" placeholder="Topic" id="topic" name="bulk[topic]">
     </div>
     <div class="form-group">
+      <label for="bulk[title]">Page Title</label>
+      <input type="string" class="form-control" placeholder="title" name="bulk[title]">
+    </div>
+    <div class="form-group">
       <label for="bulk[keyword1]">Keyword 1</label>
       <input type="string" class="form-control" placeholder="Keyword 1" name="bulk[keyword1]">
     </div>
@@ -83,6 +87,36 @@
       <label for="bulk[meta]">Meta Description</label>
       <input type="string" class="form-control" placeholder="Meta Description" name="bulk[meta]">
     </div>
+    <div class="form-group">
+      <label for="bulk[url]">URL</label>
+      <input type="string" class="form-control" placeholder="URL" name="bulk[url]">
+    </div>
+     <div class="form-group">
+      <label for="bulk[city]">City</label>
+      <select class="city1" name="bulk[city]">
+        <option value="new city">New City</option>
+        <%= @cities.each do |city| %>
+          <option class="city1" value="<%= city.id %>"><%= city.name %></option>
+          <% end %>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="bulk[city]">City</label>
+      <input type="string" class="form-control" id="city" placeholder="City" name="bulk[city]"> 
+    </div>
+    <div class="form-group">
+      <label for="bulk[state]">State</label>
+      <select class="state1" name="bulk[state]">
+        <option value="new state">New State</option>
+        <%= @states.each do |state| %>
+          <option class="state1" value="<%= state.id %>"><%= state.name %></option>
+          <% end %>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="bulk[state]">State</label>
+      <input type="string" class="form-control" id="state" placeholder="State" name="bulk[state]"> 
+    </div>
     <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
     <input type="submit" class="btn btn-default" value="Create">
     </form>
@@ -99,6 +133,16 @@
     template = $("select.template1 option:selected").text();
     $("#template").val(template);
     console.log(template)
+  });
+  $(".city1").change(function() {
+    city = $("select.city1 option:selected").text();
+    $("#city").val(city);
+    console.log(city)
+  });
+  $(".state1").change(function() {
+    state = $("select.state1 option:selected").text();
+    $("#state").val(state);
+    console.log(state)
   });
 
 
