@@ -242,7 +242,7 @@ class MainsController < ApplicationController
     # If there is no state_id, default to Washington (placeholder: this may be done in the model)
     @pages.each do |page|
       if !page['page_title'].present?
-        if !page['k1_id'].present? && !page['k2_id'].present? && !page['k3_id'].present?
+        if !page['k1_id'].present? || !page['k2_id'].present? || !page['k3_id'].present?
           puts 'not all keywords present'
         else
           page['page_title'] = Keyword.find(page['k1_id']).keyword + ' (*city*) (*state*) | ' + Keyword.find(page['k2_id']).keyword + ' (*city*) | ' + Keyword.find(page['k3_id']).keyword
@@ -310,10 +310,10 @@ class MainsController < ApplicationController
     # Go through every input field and create/update as needed
     params.each do |key,val|
       # Skip any empty fields - the user can have blanks on the final edit page
-      if !val.present?
-        next
-      end
-      if key.include?'_topic'
+      # if !val.present?
+      #   next
+      # end
+      if key.include?('_topic') && val.present?
         # puts 'value: ' + val
         page_id = ''
         key.each_char { |c|
@@ -325,8 +325,8 @@ class MainsController < ApplicationController
         }
         page = template.pages.find(page_id)
         # puts page_id + ' page_id'
-        val.strip!
-        topic = industry.topics.find_or_initialize_by(name:val)
+        output = val.squish.titleize
+        topic = industry.topics.find_or_initialize_by(name:output)
         topic.save
         page.topic_id = topic.id
         page.save
@@ -353,11 +353,16 @@ class MainsController < ApplicationController
         page = template.pages.find(page_id)
         # puts page_id + ' page_id'
         # puts page.topic_id.to_s + ' topic_id'
-        val.strip!
-        # puts 'keyword: ' + val
-        keyword = Topic.find(page.topic_id).keywords.where(keyword:val).first
+        output = val.squish.titleize
+        # If value is blank, save page column as blank reference
+        if output == ''
+          page['k' + keyword_id.to_s + '_id'] = ''
+          page.save
+          next
+        end
+        keyword = Topic.find(page.topic_id).keywords.where(keyword:output).first
         if !keyword
-          keyword = Topic.find(page.topic_id).keywords.create(keyword:val)
+          keyword = Topic.find(page.topic_id).keywords.create(keyword:output)
         end
         page['k' + keyword_id.to_s + '_id'] = keyword.id
         page.save
@@ -382,16 +387,16 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        val.strip!
-        if val == ''
+        output = val.squish.titleize
+        if output == '' || page['k' + heading_id.to_s + '_id'].blank?
           page['h' + heading_id.to_s + '_id'] = ''
           page.save
           next
         end
         # puts 'heading: ' + val
-        heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.where(heading:val).first
+        heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.where(heading:output).first
         if !heading
-          heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.create(heading:val)
+          heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.create(heading:output)
         end
         page['h' + heading_id.to_s + '_id'] = heading.id
         page.save
@@ -408,7 +413,12 @@ class MainsController < ApplicationController
         }
         page = template.pages.find(page_id)
         # puts page_id + ' page_id'
-        val.strip!
+        output = val.squish.titleize
+        if output == ''
+          page.meta_id = ''
+          page.save
+          next
+        end
         meta = Topic.find(page.topic_id).metas.find_or_initialize_by(description:val)
         meta.save
         page.meta_id = meta.id
@@ -604,7 +614,6 @@ class MainsController < ApplicationController
     end
 
     #topic = Topic.create(name: bulk_params[:topic], industry_id: industry)
-
 
     keyword1Check = Topic.find(topic).keywords.where(keyword: bulk_params[:keyword1]).pluck(:id).first
       if keyword1Check.nil?
