@@ -5,6 +5,6 @@ class Meta < ActiveRecord::Base
   before_validation :squish
 
   def squish
-	self.description = self.description.squish.titleize
+	self.description = self.description.squish
   end
 end

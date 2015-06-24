@@ -33,7 +33,12 @@
         </Row>
         <Row>
           <Cell><Data ss:Type="String">Meta Description</Data></Cell>
-          <Cell><Data ss:Type="String"><%= Meta.find(page.meta_id).description %></Data></Cell>
+          <%
+            meta = Meta.find(page.meta_id).description
+            meta.gsub! '(*city*)', page.city_id.present? ? City.find(page.city_id).name : '(*city*)'
+            meta.gsub! '(*state*)', page.state_id.present? ? State.find(page.state_id).abbrev : '(*state*)'
+          %>
+          <Cell><Data ss:Type="String"><%= meta %></Data></Cell>
         </Row>
         <Row>
           <Cell><Data ss:Type="String">H1</Data></Cell>

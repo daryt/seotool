@@ -141,7 +141,7 @@ $(document).ready(function(){
 	});
 
 	// Update character counts beside the select fields, on document load
-	$('.subdivision-meta,.subdivision-heading').each(function() {
+	$('.subdivision-meta,.subdivision-heading, .subdivision-input').each(function() {
 		var count = $(this).val().length;
 		$(this).parents('.row-counter').find('.character-counter').html(count);
 	});
@@ -155,7 +155,7 @@ $(document).ready(function(){
 });
 
 // Update character counts beside the textarea field
-$('.subdivision-meta,.subdivision-heading').on('input',function(){
+$('.subdivision-meta,.subdivision-heading, .subdivision-input').on('input',function(){
 	var count = $(this).val().length;
 	$(this).parents('.row-counter').find('.character-counter').html(count);
 });
