@@ -10,7 +10,7 @@
 		<% for i in 1..3 %>
 		<div class="form-group">
 			<% keyword_id = page['k' + i.to_s + '_id'] %>
-			<%= select_tag(page.topic_id.to_s + '_' + i.to_s + '_keyword', options_for_select(Topic.find(page.topic_id).keywords.collect {|p| [p.keyword, p.id]}, selected: keyword_id), class: "form-control") %>
+			<%= select_tag(page.topic_id.to_s + '_' + i.to_s + '_keyword', options_for_select(Topic.find(page.topic_id).keywords.order(:keyword).collect {|p| [p.keyword, p.id]}, selected: keyword_id), class: "form-control") %>
 		</div>
 		<% end %>
 

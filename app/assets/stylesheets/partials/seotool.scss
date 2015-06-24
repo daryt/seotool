@@ -2,9 +2,13 @@
     /*border: 1px red dotted;*/
 }
 
-h3.warning{
+.warning{
 	color: red;
 	font-weight: bold;
+}
+
+.character-counter{
+	margin: 0px;
 }
 
 a.overview-link{
@@ -29,6 +33,18 @@ input.topic-input{
 
 input.subdivision-input{
 
+}
+
+textarea.new-meta-name, .subdivision-meta{
+	resize: none;
+	width: 100%;
+	height: 75px;
+}
+
+textarea.new-heading-name, .subdivision-heading{
+	resize: none;
+	width: 100%;
+	height: 50px;
 }
 
 .pad label{

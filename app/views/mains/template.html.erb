@@ -1,0 +1,112 @@
+<div class='container'>
+	<div class='row'>
+
+		<h1>Select your industry</h1>
+
+		<div class="">
+			<%  if flash[:errors].present? %>
+	      		<% flash[:errors].each do |error|%>
+	        		<div class="warning"><%= error %></div>
+	      		<% end %>
+	      	<% end %>
+	    </div>
+
+		<%= form_tag('/templates/', method:'post', class: 'form-horizontal') do %>
+
+		<div class="form-group">
+			<%= label_tag 'Customer',nil, class: "col-sm-2 control-label" %>
+			<div class="col-sm-4">
+				<%= select_tag("template[customer_id]", options_for_select(Customer.all.collect {|p| [p.name, p.id]} + ['New Customer']), :include_blank => 'Please select a customer', class: "form-control", required: true) %>
+			</div>
+			<div class='col-sm-4' id='new-customer-field' style='display:none'>
+				<% customer_name = flash[:customer].present? ? flash[:customer] : nil %>
+				<%= text_field_tag :new_customer, customer_name, class: "form-control", required: false %>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<%= label_tag 'Industry', nil, class: "col-sm-2 control-label" %>
+			<div class="col-sm-4">
+				<%= select_tag("template[industry_id]", options_for_select(Industry.all.collect {|p| [p.name, p.id]} + ['New Industry']), :include_blank => 'Please select an industry', class: "form-control", required: true) %>
+			</div>
+			<div class='col-sm-4' id='new-industry-field' style='display:none'>
+				<% industry_name = flash[:industry].present? ? flash[:industry] : nil %>
+				<%= text_field_tag :new_industry, industry_name, class: "form-control", required: false %>
+			</div>
+		</div>
+
+		<div class="form-group">
+	        <%= label_tag 'Template name',nil, class: "col-sm-2 control-label" %>
+	        <div class="col-sm-4">
+	        	<% template_name = flash[:template].present? ? flash[:template] : nil %>
+	          <%= text_field_tag("template[name]", template_name, class: "form-control", required: true) %>
+	        </div>
+	    </div>
+
+		<div class="actions col-sm-4 col-sm-offset-2" style='padding:5px'>
+		  	<%= submit_tag "Create",class:"btn btn-success" %>
+		</div>
+
+		<% end %>
+
+	</div>
+
+	<div class='row'>
+
+		<h1>Select an in-process template</h1>
+
+		<%= form_tag("/retrieve_overview/", method: "post", class: "form-horizontal") do %>
+
+		<div class="form-group">
+			<%= label_tag 'Template name', nil, class: "col-sm-2 control-label" %>
+			<div class='col-sm-4'>
+				<%= select_tag(:id, options_for_select(@templates.collect {|p| [(p.customer.present? ? p.customer.name : '') + ' - ' + p.name, p.id]}), class: "form-control") %>
+			</div>
+		</div>
+
+		<div class="actions col-sm-4 col-sm-offset-2" style='padding:5px'>
+			<%= submit_tag("Select", class:"btn btn-primary") %>
+		</div>
+
+		<% end %>
+
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+
+	// Show new customer field if coming from a bad validation
+    if ($( "#new_customer").val() != '')
+    {
+    	$('#new-customer-field').show();
+    	$("#template_customer_id").val('New Customer');
+    }
+
+    // Show new industry field if coming from a bad validation
+	if ($( "#new_industry").val() != '')
+    {
+    	$('#new-industry-field').show();
+    	$("#template_industry_id").val('New Industry');
+    }
+
+	// Show new customer creation field if appropriate option selected
+	$( "#template_customer_id" ).change(function() {
+	    if ($( "#template_customer_id option:selected" ).text() == 'New Customer')
+	    {
+	    	$('#new-customer-field').show();
+	    }else{
+	    	$('#new-customer-field').hide();
+	    }
+	});
+	// Show new industry creation field if appropriate option selected
+	$( "#template_industry_id" ).change(function() {
+	    if ($( "#template_industry_id option:selected" ).text() == 'New Industry')
+	    {
+	    	$('#new-industry-field').show();
+	    }else{
+	    	$('#new-industry-field').hide();
+	    }
+	});
+});
+</script>

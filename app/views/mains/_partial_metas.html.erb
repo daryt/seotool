@@ -7,13 +7,29 @@
 	<div>
 		<h1><%= Topic.find(page.topic_id).name %></h1>
 
-		<div class="form-group">
-			<%= select_tag(page.topic_id.to_s + '_meta', options_for_select(Topic.find(page.topic_id).metas.collect {|p| [p.description, p.id]}, selected: page.meta_id), class: "form-control") %>
+
+		<div class='row row-meta'>
+			<div class='col-xs-10'>
+				<div class="form-group">
+					<%= select_tag(page.topic_id.to_s + '_meta', options_for_select(Topic.find(page.topic_id).metas.order(:description).collect {|p| [p.description, p.id]}, selected: page.meta_id), class: "form-control select-meta") %>
+				</div>
+			</div>
+			<div class='col-xs-2'>
+				<p class='character-counter'></p><p> characters</p>
+			</div>
 		</div>
 
-		<div class='form-group'>
-			<input class='new-meta-name' type='text'>
-			<button class='new-meta-submit' data-topic-id=<%= page.topic_id %>>Add Meta Description</button>
+
+		<div class='row row-new-meta'>
+			<div class='col-xs-10'>
+				<div class='form-group'>
+					<textarea class='new-meta-name'></textarea>
+					<button class='new-meta-submit' data-topic-id=<%= page.topic_id %>>Add Meta Description</button>
+				</div>
+			</div>
+			<div class='col-xs-2'>
+				<p class='character-counter'>0</p><p> characters</p>
+			</div>
 		</div>
 
 	</div>
@@ -22,3 +38,28 @@
 	<%= submit_tag("Save and Continue", class:"btn btn-primary") %>
 
 <% end %>
+
+<script>
+
+$(document).ready(function(){
+
+	// Update character counts beside the meta select field, on document load
+	$('.select-meta').each(function() {
+		var count = $(this).find("option:selected").text().length;
+		$(this).parents('.row-meta').find('.character-counter').html(count);
+	});
+
+	// Update character counts beside the meta select field
+	$( ".select-meta" ).change(function() {
+		var count = $(this).find("option:selected").text().length;
+		$(this).parents('.row-meta').find('.character-counter').html(count);
+	});
+});
+
+// Update character counts beside the meta textarea field
+$(".new-meta-name").on('input',function(){
+	var count = $(this).val().length;
+	$(this).parents('.row-new-meta').find('.character-counter').html(count);
+});
+
+</script>

@@ -8,7 +8,10 @@ Rails.application.routes.draw do
   post '/retrieve_overview/' => 'mains#retrieve_overview'
   get '/show_overview' => 'mains#show_overview'
   post '/update_overview' => 'mains#update_overview'
+  post '/refresh_url' => 'mains#refresh_url'
+  post '/refresh_page_title' => 'mains#refresh_page_title'
 
+  get '/show_templates' => 'mains#show_template'
   post '/templates/' => 'mains#new_template'
 
   get '/sitemap' => 'mains#show_sitemap'

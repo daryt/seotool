@@ -9,12 +9,27 @@
 
 			<% @pages.each do |page| %>
 
-			<div class='form-group'>
-				<label class='col-sm-1 control-label'><a href='/sitemap'>Topic</a></label>
-				<div class="col-sm-6">
-					<%= text_field_tag(page.id.to_s + '_topic', Topic.find(page.topic_id).name, class: "topic-input form-control") %>
+				<div class='form-group'>
+					<label class='col-sm-1 control-label'><a href='/sitemap'>Topic</a></label>
+					<div class="col-sm-6">
+						<%= text_field_tag(page.id.to_s + '_topic', Topic.find(page.topic_id).name, class: "topic-input form-control") %>
+					</div>
 				</div>
-			</div>
+
+
+				<div class='form-group row-counter'>
+					<label class='col-sm-2 control-label'>Page Title</label>
+					<div class="col-sm-6">
+						<%= text_field_tag(page.id.to_s + '_pagetitle', page['page_title'], class: "subdivision-input form-control", pageid: page.id.to_s, datatype: 'page_title') %>
+					</div>
+					<div class='col-sm-2'>
+						<p class='character-counter'>0</p><p> characters</p>
+					</div>
+					<div class='col-sm-2'>
+						<button class='btn btn-warning refresh-string'>Refresh Page Title</button>
+					</div>
+				</div>
+
 
 				<% for i in 1..3 %>
 
@@ -26,42 +41,48 @@
 						</div>
 					</div>
 
-					<div class='form-group'>
+					<div class='form-group row-counter'>
 						<label class='col-sm-2 control-label'><a href='/show_headings'>Heading <%= i %></a></label>
 						<div class="col-sm-6">
 							<% heading = page['h' + i.to_s + '_id'] && !Heading.where(:id => page['h' + i.to_s + '_id']).empty? ? Heading.find(page['h' + i.to_s + '_id']).heading : '' %>
-							<%= text_field_tag(page.id.to_s + '_' + i.to_s + '_heading', heading, class: "subdivision-input form-control") %>
+							<%= text_area_tag(page.id.to_s + '_' + i.to_s + '_heading', heading, class: "subdivision-heading form-control") %>
+						</div>
+						<div class='col-sm-2'>
+							<p class='character-counter'>0</p><p> characters</p>
 						</div>
 					</div>
 
 				<% end %>
 
-				<div class='form-group'>
+				<div class='form-group row-counter'>
 					<label class='col-sm-2 control-label'><a href='/show_metas'>Meta Description</a></label>
 					<div class="col-sm-6">
 						<% meta = page['meta_id'] && !Meta.where(:id => page['meta_id']).empty? ? Meta.find(page.meta_id).description : '' %>
-						<%= text_field_tag(page.id.to_s + '_meta', meta, class: "subdivision-input form-control") %>
+						<%= text_area_tag(page.id.to_s + '_meta', meta, class: "subdivision-meta form-control", rows: "3") %>
+					</div>
+					<div class='col-sm-2'>
+						<p class='character-counter'>0</p><p> characters</p>
 					</div>
 				</div>
 
-				<div class='form-group'>
-					<label class='col-sm-2 control-label'>Page Title</label>
-					<div class="col-sm-6">
-						<%= text_field_tag(page.id.to_s + '_pagetitle', page['page_title'], class: "subdivision-input form-control") %>
-					</div>
-				</div>
-
-				<div class='form-group'>
+				<div class='form-group row-counter'>
 					<label class='col-sm-2 control-label'>Page URL</label>
 					<div class="col-sm-6">
-						<%= text_field_tag(page.id.to_s + '_url', page['url'], class: "subdivision-input form-control") %>
+						<%= text_field_tag(page.id.to_s + '_url', page['url'], class: "subdivision-input form-control", pageid: page.id.to_s, datatype: 'url') %>
+					</div>
+					<div class='col-sm-2'>
+						<p class='character-counter'>0</p><p> characters</p>
+					</div>
+					<div class='col-sm-2'>
+						<button class='btn btn-warning refresh-string'>Refresh URL</button>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<%= label_tag 'State',nil, class: "col-sm-2 control-label" %>
 					<div class="col-sm-4">
-						<%= select_tag(page.id.to_s + '_state_id', options_for_select(State.all.collect {|p| [p.name, p.id]} + ['New State'], selected: page.state_id), class: "form-control state-select-option") %>
+						<% selected = page.state_id.present? ? page.state_id : 'Leave state blank' %>
+						<%= select_tag(page.id.to_s + '_state_id', options_for_select(State.all.order(:name).collect {|p| [p.name, p.id]} + ['New State'] + ['Leave state blank'], selected: selected), class: "form-control state-select-option") %>
 					</div>
 					<div class='col-sm-4' id='new-state-field' style='display:none'>
 						<%= text_field_tag(page.id.to_s + '_new_state', nil, class: "form-control", required: false) %>
@@ -71,7 +92,9 @@
 				<div class="form-group">
 					<%= label_tag 'City',nil, class: "col-sm-2 control-label" %>
 					<div class="col-sm-4">
-						<%= select_tag(page.id.to_s + '_city_id', options_for_select(State.find(page.state_id).cities.collect {|p| [p.name, p.id]} + ['New City'], selected: page.city_id), class: "form-control city-select-option") %>
+						<% selected = page.city_id.present? ? page.city_id : 'Leave city blank' %>
+						<!-- State.find(page.state_id).cities.order(:name).collect -->
+						<%= select_tag(page.id.to_s + '_city_id', options_for_select(City.all.order(:name).collect {|p| [p.name, p.id]} + ['New City'] + ['Leave city blank'], selected: selected), class: "form-control city-select-option") %>
 					</div>
 					<div class='col-sm-4' id='new-city-field' style='display:none'>
 						<%= text_field_tag(page.id.to_s + '_new_city', nil, class: "form-control", required: false) %>
@@ -116,6 +139,25 @@ $(document).ready(function(){
 	    	$(this).parent().siblings('#new-city-field').hide();
 	    }
 	});
+
+	// Update character counts beside the select fields, on document load
+	$('.subdivision-meta,.subdivision-heading').each(function() {
+		var count = $(this).val().length;
+		$(this).parents('.row-counter').find('.character-counter').html(count);
+	});
+
+	// // Update character counts beside the select fields
+	// $( ".subdivision-meta subdivision-heading" ).change(function() {
+	// 	var count = $(this).find("option:selected").text().length;
+	// 	$(this).parents('.row-meta').find('.character-counter').html(count);
+	// });
+
+});
+
+// Update character counts beside the textarea field
+$('.subdivision-meta,.subdivision-heading').on('input',function(){
+	var count = $(this).val().length;
+	$(this).parents('.row-counter').find('.character-counter').html(count);
 });
 
 // Perform client-side validations to ensure they aren't trying to use dupe keywords per topic
@@ -173,5 +215,27 @@ $(document).on('click','.validate-fields',function(){
 		});
 		return false;
 	}
+});
+
+$(document).on('click','.refresh-string',function(){
+
+	var page_id = $(this).parents('.row-counter').find('.subdivision-input').attr('pageid');
+	var selector_id = $(this).parents('.row-counter').find('.subdivision-input').attr('id');
+	var datatype = $(this).parents('.row-counter').find('.subdivision-input').attr('datatype');
+
+	$.ajax({
+	    url : '/refresh_' + datatype, //Target URL for JSON file
+	    method: 'POST',
+	    data: {'page_id':page_id, 'selector':selector_id},
+	    success : function(data){
+	    	// console.log(data);
+	        $('#' + data.selector).val(data.text);
+	    },
+	    error : function(xhr, status){
+	        console.log(status);
+	    }
+	});
+
+	return false;
 });
 </script>

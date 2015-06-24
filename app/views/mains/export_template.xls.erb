@@ -4,6 +4,15 @@
   xmlns:x="urn:schemas-microsoft-com:office:excel"
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:html="http://www.w3.org/TR/REC-html40">
+  <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+    <Title>Something</Title>
+    <Author>Someone</Author>
+    <LastAuthor>Self</LastAuthor>
+    <Created>2012-03-15T23:04:04Z</Created>
+    <Company>Eaton Corporation</Company>
+    <Version>11.8036</Version>
+  </DocumentProperties>
+
   <Worksheet ss:Name="Sheet1">
     <Table>
       <ss:Column ss:Width="120"/>
@@ -15,7 +24,11 @@
         </Row>
         <Row>
           <Cell><Data ss:Type="String">Page Title</Data></Cell>
-          <% page_title = page.page_title; page_title.gsub! '(*city*)', City.find(page.city_id).name; page_title.gsub! '(*state*)', State.find(page.state_id).abbrev; %>
+          <%
+            page_title = page.page_title
+            page_title.gsub! '(*city*)', page.city_id.present? ? City.find(page.city_id).name : '(*city*)'
+            page_title.gsub! '(*state*)', page.state_id.present? ? State.find(page.state_id).abbrev : '(*state*)'
+          %>
           <Cell><Data ss:Type="String"><%= page_title %></Data></Cell>
         </Row>
         <Row>
@@ -36,8 +49,12 @@
         </Row>
         <Row>
           <Cell><Data ss:Type="String">URL</Data></Cell>
-          <% url = page.url; url.gsub! '(*city*)', City.find(page.city_id).name; url.gsub! '(*state*)', State.find(page.state_id).abbrev; %>
-          <Cell><Data ss:Type="String"><%= url %></Data></Cell>
+          <%
+            url = page.url
+            url.gsub! '(*city*)', page.city_id.present? ? City.find(page.city_id).name : '(*city*)'
+            url.gsub! '(*state*)', page.state_id.present? ? State.find(page.state_id).abbrev : '(*state*)'
+          %>
+          <Cell><Data ss:Type="String"><%= url.downcase %></Data></Cell>
         </Row>
         <Row>
         </Row>

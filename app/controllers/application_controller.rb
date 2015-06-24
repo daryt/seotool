@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper_method :current_template
 
   def after_sign_in_path_for(resource)
-    request.env['omniauth.origin'] || stored_location_for(resource) || '/'
+    request.env['omniauth.origin'] || stored_location_for(resource) || '/show_templates'
   end
 
   def current_template

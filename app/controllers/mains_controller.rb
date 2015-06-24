@@ -7,10 +7,15 @@
 # Primary controller class for SEO Tool application
 
 class MainsController < ApplicationController
+  before_action :authenticate_user!, except: [:index]
 
   def index
+  end
+
+  def show_template
   	# @template = Template.new
   	@templates = Template.where(status: 'draft')
+    render :template
   end
 
   # Create a new template and render the sitemap with default info
@@ -18,15 +23,40 @@ class MainsController < ApplicationController
 
     customer_id = template_params[:customer_id]
     industry_id = template_params[:industry_id]
+    errors = []
 
     if template_params[:customer_id] == 'New Customer'
-      customer = Customer.create(name:params[:new_customer])
+      customer = Customer.new(name:params[:new_customer])
+
+      if customer.save
+        puts 'customer saved'
+      else
+        customer.errors.full_messages.each do |message|
+          puts message
+          errors.push(message)
+        end
+      end
       customer_id = customer.id
     end
     if template_params[:industry_id] == 'New Industry'
-      puts params
-      industry = Industry.create(name:params[:new_industry])
+      industry = Industry.new(name:params[:new_industry])
+      if industry.save
+        puts 'industry saved'
+      else
+        industry.errors.full_messages.each do |message|
+          puts message
+          errors.push(message)
+        end
+      end
       industry_id = industry.id
+    end
+
+    if !errors.empty?
+      flash[:errors] = errors
+      flash[:customer] = customer.present? ? customer.name : nil
+      flash[:industry] = industry.present? ? industry.name : nil
+      redirect_to '/'
+      return
     end
 
     @template = Template.new(name:template_params[:name],industry_id:industry_id,customer_id:customer_id)
@@ -41,7 +71,8 @@ class MainsController < ApplicationController
       else
         # format.html { render :new }
         # format.json { render json: @user.errors, status: :unprocessable_entity }
-        flash[:errors] = @user.errors.full_messages
+        flash[:errors] = @template.errors.full_messages
+        flash[:template] = @template.present? ? @template.name : nil
         redirect_to '/'
     end
   end
@@ -52,7 +83,7 @@ class MainsController < ApplicationController
     @industry = Industry.find(@template.industry_id)
     @pages = @template.pages
     # puts YAML::dump(@pages)
-    @topics = @industry.topics
+    @topics = @industry.topics.order(:name)
     render :sitemap
   end
 
@@ -222,18 +253,52 @@ class MainsController < ApplicationController
         if !page['k1_id'].present?
           puts 'first keyword not present'
         else
-          page['url'] = Keyword.find(page['k1_id']).keyword.downcase + '-(*city*)-(*state*)'
+          # keyword_part = Keyword.find(page['k1_id']).keyword.downcase
+          page['url'] = Keyword.find(page['k1_id']).keyword.parametrize.downcase + '-(*city*)-(*state*)'
           page.save
         end
       end
-      if !page['state_id'].present?
-        puts 'creating state id'
-        page['state_id'] = State.where(name: 'Washington').first.id
-        page.save
-      end
+      # if !page['state_id'].present?
+      #   puts 'creating state id'
+      #   page['state_id'] = State.where(name: 'Washington').first.id
+      #   page.save
+      # end
     end
 
     render :overview
+  end
+
+  def refresh_url
+    # puts params
+    page = Page.find(params[:page_id])
+    if !page['k1_id'].present?
+      puts 'first keyword not present'
+    else
+      # keyword_part = Keyword.find(page['k1_id']).keyword.downcase
+      page['url'] = Keyword.find(page['k1_id']).keyword.parameterize.downcase + '-(*city*)-(*state*)'
+      page.save
+    end
+    respond_to do |format|
+      format.json { render json: {'text' => page.url, 'selector' => params[:selector] } }
+      # format.json { render json: page }
+    end
+  end
+
+  def refresh_page_title
+    # puts params
+    page = Page.find(params[:page_id])
+    if !page['k1_id'].present? && !page['k2_id'].present? && !page['k3_id'].present?
+      puts 'not all keywords present'
+    else
+      page['page_title'] = Keyword.find(page['k1_id']).keyword + ' (*city*) (*state*) | ' + Keyword.find(page['k2_id']).keyword + ' (*city*) | ' + Keyword.find(page['k3_id']).keyword
+      page.save
+      # @page['url'] = Keyword.find(@page['k1_id']).keyword.parameterize.downcase + '-(*city*)-(*state*)'
+      # @page.save
+    end
+    respond_to do |format|
+      format.json { render json: {'text' => page.page_title, 'selector' => params[:selector] } }
+      # format.json { render json: @page }
+    end
   end
 
   # Process changes in the overview page
@@ -248,7 +313,7 @@ class MainsController < ApplicationController
         next
       end
       if key.include?'_topic'
-        puts 'value: ' + val
+        # puts 'value: ' + val
         page_id = ''
         key.each_char { |c|
           if c != '_'
@@ -258,7 +323,7 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        puts page_id + ' page_id'
+        # puts page_id + ' page_id'
         val.strip!
         topic = industry.topics.find_or_initialize_by(name:val)
         topic.save
@@ -285,10 +350,10 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        puts page_id + ' page_id'
-        puts page.topic_id.to_s + ' topic_id'
+        # puts page_id + ' page_id'
+        # puts page.topic_id.to_s + ' topic_id'
         val.strip!
-        puts 'keyword: ' + val
+        # puts 'keyword: ' + val
         keyword = Topic.find(page.topic_id).keywords.where(keyword:val).first
         if !keyword
           keyword = Topic.find(page.topic_id).keywords.create(keyword:val)
@@ -322,7 +387,7 @@ class MainsController < ApplicationController
           page.save
           next
         end
-        puts 'heading: ' + val
+        # puts 'heading: ' + val
         heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.where(heading:val).first
         if !heading
           heading = Keyword.find(page['k' + heading_id.to_s + '_id']).headings.create(heading:val)
@@ -341,7 +406,7 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        puts page_id + ' page_id'
+        # puts page_id + ' page_id'
         val.strip!
         meta = Topic.find(page.topic_id).metas.find_or_initialize_by(description:val)
         meta.save
@@ -359,9 +424,9 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        puts page_id + ' page_id'
+        # puts page_id + ' page_id'
         val.strip!
-        puts page.page_title
+        # puts page.page_title
         page.update(page_title: val)
         next
       end
@@ -375,14 +440,14 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
-        puts page_id + ' page_id'
+        # puts page_id + ' page_id'
         val.strip!
         puts page.page_title
         page.update(url: val)
         next
       end
       if key.include? '_state_id'
-        puts key
+        # puts key
         page_id = ''
         key.each_char { |c|
           if c != '_'
@@ -392,6 +457,10 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
+        if val == 'Leave state blank'
+          page.update(state_id: nil)
+          next
+        end
         if val == 'New State'
           new_state = params[page_id.to_s + '_new_state']
           new_state.strip!
@@ -412,6 +481,10 @@ class MainsController < ApplicationController
           end
         }
         page = template.pages.find(page_id)
+        if val == 'Leave city blank'
+          page.update(city_id: nil)
+          next
+        end
         if val == 'New City'
 
           new_city = params[page_id.to_s + '_new_city']
@@ -433,9 +506,12 @@ class MainsController < ApplicationController
     # @industry = Industry.find(@template.industry_id)
     @pages = @template.pages
     puts 'attempting to send data'
+    filename = @template.customer.name + '-SEO template-' + @template.name
+    # headers["Content-Disposition"] = "attachment; filename=\"#{filename}\""
     respond_to do |format|
       format.csv { send_data @pages.to_csv }
-      format.xls # { send_data @products.to_csv(col_sep: "\t") }
+      format.xls {response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '.xls"'}
+      # { send_data @products.to_csv(col_sep: "\t") }
     end
   end
 
@@ -475,7 +551,7 @@ class MainsController < ApplicationController
     if params[:section] == 'topics'
       @template = Template.find(session[:current_template_id])
       @industry = Industry.find(@template.industry_id)
-      @topics = @industry.topics
+      @topics = @industry.topics.order(:name)
     end
     @section_id = params[:section]
     respond_to do |format|
@@ -497,7 +573,7 @@ class MainsController < ApplicationController
     # respond_to do |format|
     #   format.html
     #   format.js
-    # end    
+    # end
   end
 
   def bulk_template # this is for the bulk input form
@@ -646,6 +722,16 @@ class MainsController < ApplicationController
     def bulk_params
       params.require(:bulk).permit(:title, :industry, :topic, :keyword1, :keyword2, :keyword3, :heading1, :heading2, :heading3, :meta, :customer, :template, :url, :city, :state)
     end
+
+    def authenticate_user!
+    if user_signed_in? # && current_user.id == params[:id].to_i
+      # puts 'authenticated'
+      return
+    else
+      puts 'unauthorized access'
+      redirect_to new_user_session_path, :notice => "You must have permission to access this page."
+    end
+  end
 
 end
 
