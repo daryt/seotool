@@ -1,7 +1,7 @@
 class Customer < ActiveRecord::Base
   has_many :templates
 
-  validates :name, uniqueness: { scope: :state_id, message: " already taken for this state - city Name field" }
+  validates :name, uniqueness: { message: " already taken for this customer - customer Name field" }
   before_validation :squish
 
   def squish

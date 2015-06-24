@@ -42,15 +42,30 @@
         </Row>
         <Row>
           <Cell><Data ss:Type="String">H1</Data></Cell>
-          <Cell><Data ss:Type="String"><%= Heading.find(page.h1_id).heading %></Data></Cell>
+          <%
+            heading = Heading.find(page.h1_id).heading
+            heading.gsub! '(*City*)', page.city_id.present? ? City.find(page.city_id).name : '(*city*)'
+            heading.gsub! '(*State*)', page.state_id.present? ? State.find(page.state_id).abbrev : '(*state*)'
+          %>
+          <Cell><Data ss:Type="String"><%= heading %></Data></Cell>
         </Row>
         <Row>
           <Cell><Data ss:Type="String">H2</Data></Cell>
-          <Cell><Data ss:Type="String"><%= Heading.find(page.h2_id).heading %></Data></Cell>
+          <%
+            heading = Heading.find(page.h2_id).heading
+            heading.gsub! '(*City*)', page.city_id.present? ? City.find(page.city_id).name : '(*city*)'
+            heading.gsub! '(*State*)', page.state_id.present? ? State.find(page.state_id).abbrev : '(*state*)'
+          %>
+          <Cell><Data ss:Type="String"><%= heading %></Data></Cell>
         </Row>
         <Row>
           <Cell><Data ss:Type="String">H3</Data></Cell>
-          <Cell><Data ss:Type="String"><%= Heading.find(page.h3_id).heading %></Data></Cell>
+          <%
+            heading = Heading.find(page.h3_id).heading
+            heading.gsub! '(*City*)', page.city_id.present? ? City.find(page.city_id).name : '(*city*)'
+            heading.gsub! '(*State*)', page.state_id.present? ? State.find(page.state_id).abbrev : '(*state*)'
+          %>
+          <Cell><Data ss:Type="String"><%= heading %></Data></Cell>
         </Row>
         <Row>
           <Cell><Data ss:Type="String">URL</Data></Cell>
