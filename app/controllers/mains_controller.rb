@@ -303,6 +303,7 @@ class MainsController < ApplicationController
 
   # Process changes in the overview page
   def update_overview
+    puts params
     template = Template.find(session[:current_template_id])
     industry = Industry.find(template.industry_id)
 
@@ -496,9 +497,17 @@ class MainsController < ApplicationController
         page.update(city_id: city.present? ? city.id : val)
         next
       end
+      if key.include?'published'
+        template.update(status:'published')
+        next
+      end
     end
 
-    redirect_to '/show_overview'
+    if template.status == 'published'
+      redirect_to '/show_templates'
+    else
+      redirect_to '/show_overview'
+    end
   end
 
   def export_template

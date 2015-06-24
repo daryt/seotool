@@ -107,10 +107,20 @@
 
 			<div id='confirm'>
 			</div>
+			<div class='row'>
+				<div class='col-sm-4 col-sm-offset-2'>
+				<%= submit_tag("Save Template", class:"btn btn-primary validate-fields") %>
 
-			<%= submit_tag("Save Template", class:"btn btn-primary validate-fields") %>
+				<%= link_to "Export as Excel", export_path(format: "xls") %>
+				</div>
+			</div>
 
-			<%= link_to "Export as Excel", export_path(format: "xls") %>
+			<div class='row margin-top-buffer'>
+				<div class='col-sm-4 col-sm-offset-2'>
+
+				<%= submit_tag("Publish Template", class:"btn btn-primary validate-fields", name: 'published', value:'Publish Template', data: { confirm: "Are you sure?"} ) %>
+				</div>
+			</div>
 
 		<% end %>
 
