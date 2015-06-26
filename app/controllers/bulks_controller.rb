@@ -43,7 +43,7 @@ class BulksController < ApplicationController
 
     formattedVal = bulk_params[:template].squish.titleize
     flash[:template] = formattedVal
-    templateCheck = Customer.find(customer).templates.find_or_create_by(name: bulk_params[:template])
+    templateCheck = Customer.find(customer).templates.find_or_create_by(name: formattedVal)
     if templateCheck.errors.present?
       puts "errors found in temp check"
       flash[:errors] = templateCheck.errors.full_messages
@@ -119,7 +119,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:heading1].squish.titleize
     flash[:heading1] = formattedVal
     if formattedVal.present? && keyword1.present?
-      heading1Check = Keyword.find(keyword1).headings.find_or_create_by(heading: bulk_params[:heading1])
+      heading1Check = Keyword.find(keyword1).headings.find_or_create_by(heading: formattedVal)
       if heading1Check.errors.present?
         puts "errors found in h1 check"
         flash[:errors] = heading1Check.errors.full_messages
@@ -133,7 +133,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:heading2].squish.titleize
     flash[:heading2] = formattedVal
     if formattedVal.present? && keyword2.present?
-      heading2Check = Keyword.find(keyword1).headings.find_or_create_by(heading: bulk_params[:heading1])
+      heading2Check = Keyword.find(keyword1).headings.find_or_create_by(heading: formattedVal)
       if heading2Check.errors.present?
         puts "errors found in h2 check"
         flash[:errors] = heading2Check.errors.full_messages
@@ -147,7 +147,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:heading3].squish.titleize
     flash[:heading3] = formattedVal
     if formattedVal.present? && keyword3.present?
-      heading3Check = Keyword.find(keyword1).headings.find_or_create_by(heading: bulk_params[:heading1])
+      heading3Check = Keyword.find(keyword1).headings.find_or_create_by(heading: formattedVal)
       if heading3Check.errors.present?
         puts "errors found in h3 check"
         flash[:errors] = heading3Check.errors.full_messages
@@ -161,7 +161,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:meta].squish
     flash[:meta] = formattedVal
     if formattedVal.present?
-      metaCheck = Topic.find(topic).metas.find_or_create_by(description: bulk_params[:meta])
+      metaCheck = Topic.find(topic).metas.find_or_create_by(description: formattedVal)
       if metaCheck.errors.present?
         puts "errors found in meta check"
         flash[:errors] = metaCheck.errors.full_messages
@@ -176,7 +176,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:state].squish.titleize
     flash[:state] = formattedVal
     if formattedVal.present?
-      stateCheck = State.find_or_create_by(name: bulk_params[:state])
+      stateCheck = State.find_or_create_by(name: formattedVal)
       if stateCheck.errors.present?
         puts "errors found in state check"
         flash[:errors] = stateCheck.errors.full_messages
@@ -190,7 +190,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:city].squish.titleize
     flash[:city] = formattedVal
     if formattedVal.present?
-      cityCheck = State.find(state).cities.find_or_create_by(name: bulk_params[:city])
+      cityCheck = State.find(state).cities.find_or_create_by(name: formattedVal)
       if cityCheck.errors.present?
         puts "errors found in city check"
         flash[:errors] = cityCheck.errors.full_messages
