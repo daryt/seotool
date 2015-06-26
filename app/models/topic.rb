@@ -5,7 +5,7 @@ class Topic < ActiveRecord::Base
   has_many :topic_industries
   has_many :metas
 
-  validates :name, presence: true
+  validates :name, presence: { message: " required - New Topic Field" }
     before_validation :squish
 
     def squish

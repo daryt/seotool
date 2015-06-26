@@ -34,10 +34,10 @@ Rails.application.routes.draw do
 
   get '/' => 'mains#index'
 
-  get '/bulk_form' => 'mains#bulk' # for entering bulk templates
-  post '/bulk' => 'mains#bulk_template' #creating bulk templates
+  get '/bulk_form' => 'bulks#bulk' # for entering bulk templates
+  post '/bulk' => 'bulks#bulk_template' #creating bulk templates
 
-  get '/bulk_topics/:industry' => 'mains#bulk_topics'
+  get '/bulk_topics/:industry' => 'bulks#bulk_topics'
 
   devise_for :users, :controllers => { registrations: 'users/registrations', sessions: 'users/sessions' }
 

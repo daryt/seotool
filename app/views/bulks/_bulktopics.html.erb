@@ -1,8 +1,7 @@
-    <div id="topicslist" class='form-select'>
+    <div id="topicslist" >
     <div class="form-group<!-- ">
       <label for="bulk[topic]">Topic</label>
       <select class="topic1" name="bulk[topic]">
-        <% topic_name = flash[:topic].present? && flash[:success].blank? ? flash[:topic] : nil %>
         <% if @topics.nil? %>
         <option class="topic1" value="new topic">New Topic</option>
         <% elsif %>
@@ -14,21 +13,6 @@
     </div>
   </div>
 <script>
-$(document).ready(function(){
-
-    $('input.form-control').each(function(){
-      // console.log($(this).val());
-      if ($(this).val())
-      {
-        console.log($(this).val());
-        // $(this).parent().siblings('.form-select select option[value="' + $(this).val() + '"]').prop('selected',true);
-        var out = $(this).parents('.form-select').find('select option:contains("' + $(this).val() + '")').prop('selected',true);
-        console.log(out);
-      }
-    })
-
-  });
-
      $(".topic1").change(function() {
     topic = $("select.topic1 option:selected").text();
     $("#topic").val(topic);

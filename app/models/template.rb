@@ -2,7 +2,7 @@ class Template < ActiveRecord::Base
 	has_many :pages, through: :page_templates
 	has_many :page_templates
   	belongs_to :customer
-  	validates :name, uniqueness: { scope: :customer_id, message: " already taken for this customer - template Name field" }
+  	validates :name, uniqueness: { scope: :customer_id, message: " already taken for this customer - template Name field" }, presence: { message: " required - New Template Field" }
 
   	before_validation :squish
 
