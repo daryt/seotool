@@ -254,7 +254,7 @@ class MainsController < ApplicationController
           puts 'first keyword not present'
         else
           # keyword_part = Keyword.find(page['k1_id']).keyword.downcase
-          page['url'] = Keyword.find(page['k1_id']).keyword.parametrize.downcase + '-(*city*)-(*state*)'
+          page['url'] = Keyword.find(page['k1_id']).keyword.parameterize.downcase + '-(*city*)-(*state*)'
           page.save
         end
       end
