@@ -133,7 +133,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:heading2].squish.titleize
     flash[:heading2] = formattedVal
     if formattedVal.present? && keyword2.present?
-      heading2Check = Keyword.find(keyword1).headings.find_or_create_by(heading: formattedVal)
+      heading2Check = Keyword.find(keyword2).headings.find_or_create_by(heading: formattedVal)
       if heading2Check.errors.present?
         puts "errors found in h2 check"
         flash[:errors] = heading2Check.errors.full_messages
@@ -147,7 +147,7 @@ class BulksController < ApplicationController
     formattedVal = bulk_params[:heading3].squish.titleize
     flash[:heading3] = formattedVal
     if formattedVal.present? && keyword3.present?
-      heading3Check = Keyword.find(keyword1).headings.find_or_create_by(heading: formattedVal)
+      heading3Check = Keyword.find(keyword3).headings.find_or_create_by(heading: formattedVal)
       if heading3Check.errors.present?
         puts "errors found in h3 check"
         flash[:errors] = heading3Check.errors.full_messages
