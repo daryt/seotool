@@ -82,7 +82,7 @@
 					<%= label_tag 'State',nil, class: "col-sm-2 control-label" %>
 					<div class="col-sm-4">
 						<% selected = page.state_id.present? ? page.state_id : 'Leave state blank' %>
-						<%= select_tag(page.id.to_s + '_state_id', options_for_select(State.all.order(:name).collect {|p| [p.name, p.id]} + ['New State'] + ['Leave state blank'], selected: selected), class: "form-control state-select-option") %>
+						<%= select_tag(page.id.to_s + '_state_id', options_for_select(State.all.order(:name).collect {|p| [p.name, p.id]} + ['Leave state blank'], selected: selected), class: "form-control state-select-option") %>
 					</div>
 					<div class='col-sm-4' id='new-state-field' style='display:none'>
 						<%= text_field_tag(page.id.to_s + '_new_state', nil, class: "form-control", required: false) %>

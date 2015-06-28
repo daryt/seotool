@@ -20,7 +20,7 @@
       <div class="form-group">
         <label for="bulk[customer]">New Customer</label>
         <% customer_name = flash[:customer].present? ? flash[:customer] : nil %>
-        <input type="string" class="form-control" id="customer" placeholder="Customer" name="bulk[customer]" value='<%=customer_name %>'> 
+        <input type="string" class="form-control" id="customer" placeholder="Customer" name="bulk[customer]" value='<%=customer_name %>'>
       </div>
     </div>
 
@@ -37,7 +37,7 @@
       <div class="form-group">
         <label for="bulk[template]">New Template</label>
         <% template_name = flash[:template].present? ? flash[:template] : nil %>
-        <input type="string" class="form-control" id="template" placeholder="Customer" name="bulk[template]" value='<%=template_name %>'> 
+        <input type="string" class="form-control" id="template" placeholder="Customer" name="bulk[template]" value='<%=template_name %>'>
       </div>
     </div>
 
@@ -57,7 +57,7 @@
         <input type="string" class="form-control" id="industry" placeholder="Industry" name="bulk[industry]" value='<%=industry_name %>'>
       </div>
     </div>
-  
+
       <%= render "bulktopics" %>
 
       <script>
@@ -69,42 +69,42 @@
       <div class="form-group">
       <label for="bulk[topic]">Topic</label>
       <% topic_name = flash[:topic].present? && flash[:success].blank? ? flash[:topic] : nil %>
-      <input type="string" class="form-control" placeholder="Topic" id="topic" name="bulk[topic]" value='<%=topic_name %>'>  
+      <input type="string" class="form-control" placeholder="Topic" id="topic" name="bulk[topic]" value='<%=topic_name %>'>
     </div>
     <div class="form-group">
       <label for="bulk[title]">Page Title</label>
       <% page_title = flash[:page_title].present? && flash[:success].blank? ? flash[:page_title] : nil %>
-      <input type="string" class="form-control" placeholder="title" name="bulk[title]" value='<%=page_title %>'>  
+      <input type="string" class="form-control" placeholder="title" name="bulk[title]" value='<%=page_title %>'>
     </div>
     <div class="form-group">
       <label for="bulk[keyword1]">Keyword 1</label>
       <% keyword1 = flash[:keyword1].present? && flash[:success].blank? ? flash[:keyword1] : nil %>
-      <input type="string" class="form-control" placeholder="Keyword 1" name="bulk[keyword1]" value='<%=keyword1 %>'>  
+      <input type="string" class="form-control" placeholder="Keyword 1" name="bulk[keyword1]" value='<%=keyword1 %>'>
     </div>
      <div class="form-group">
       <label for="bulk[keyword2]">Keyword 2</label>
       <% keyword2 = flash[:keyword2].present? && flash[:success].blank? ? flash[:keyword2] : nil %>
-      <input type="string" class="form-control" placeholder="Keyword 2" name="bulk[keyword2]" value='<%=keyword2 %>'>  
+      <input type="string" class="form-control" placeholder="Keyword 2" name="bulk[keyword2]" value='<%=keyword2 %>'>
     </div>
      <div class="form-group">
       <label for="bulk[keyword3]">Keyword 3</label>
       <% keyword3 = flash[:keyword3].present? && flash[:success].blank? ? flash[:keyword3] : nil %>
-      <input type="string" class="form-control" placeholder="Keyword 3" name="bulk[keyword3]" value='<%=keyword3 %>'>  
+      <input type="string" class="form-control" placeholder="Keyword 3" name="bulk[keyword3]" value='<%=keyword3 %>'>
     </div>
     <div class="form-group">
       <label for="bulk[heading1]">Heading 1</label>
       <% heading1 = flash[:heading1].present? && flash[:success].blank? ? flash[:heading1] : nil %>
-      <input type="string" class="form-control" placeholder="Heading 1" name="bulk[heading1]" value='<%=heading1 %>'>  
+      <input type="string" class="form-control" placeholder="Heading 1" name="bulk[heading1]" value='<%=heading1 %>'>
     </div>
      <div class="form-group">
       <label for="bulk[heading2]">Heading 2</label>
       <% heading2 = flash[:heading2].present? && flash[:success].blank? ? flash[:heading2] : nil %>
-      <input type="string" class="form-control" placeholder="Heading 2" name="bulk[heading2]" value='<%=heading2 %>'>  
+      <input type="string" class="form-control" placeholder="Heading 2" name="bulk[heading2]" value='<%=heading2 %>'>
     </div>
      <div class="form-group">
       <label for="bulk[heading3]">Heading 3</label>
       <% heading3 = flash[:heading3].present? && flash[:success].blank? ? flash[:heading3] : nil %>
-      <input type="string" class="form-control" placeholder="Heading 3" name="bulk[heading3]" value='<%=heading3 %>'>  
+      <input type="string" class="form-control" placeholder="Heading 3" name="bulk[heading3]" value='<%=heading3 %>'>
     </div>
     <div class="form-group">
       <label for="bulk[meta]">Meta Description</label>
@@ -114,21 +114,21 @@
     <div class="form-group">
       <label for="bulk[url]">URL</label>
       <% url = flash[:url].present? && flash[:success].blank? ? flash[:url] : nil %>
-      <input type="string" class="form-control" placeholder="URL" name="bulk[url]" value='<%=url %>'> 
+      <input type="string" class="form-control" placeholder="URL" name="bulk[url]" value='<%=url %>'>
     </div>
     <div class="form-group">
       <label for="bulk[state]">State</label>
       <select class="state1" name="bulk[state]">
-        <option value="new state">New State</option>
+        <!-- <option value="new state">New State</option> -->
         <%= @states.each do |state| %>
-          <option class="state1" value="<%= state.id %>"><%= state.name %></option>
+          <option class="state1" value="<%= state.name %>"><%= state.name %></option>
           <% end %>
         </select>
     </div>
     <div class="form-group">
       <label for="bulk[state]">State</label>
       <% state = flash[:state].present? && flash[:success].blank? ? flash[:state] : nil %>
-      <input type="string" class="form-control" id="state" placeholder="State" name="bulk[state]" value='<%=state %>'>  
+      <input type="string" class="form-control" id="state" placeholder="State" name="bulk[state]" value='<%=state %>'>
     </div>
      <div class="form-group">
       <label for="bulk[city]">City</label>
@@ -142,15 +142,15 @@
     <div class="form-group">
       <label for="bulk[city]">City</label>
       <% city = flash[:city].present? && flash[:success].blank? ? flash[:city] : nil %>
-      <input type="string" class="form-control" id="city" placeholder="City" name="bulk[city]" value='<%=city %>'>  
+      <input type="string" class="form-control" id="city" placeholder="City" name="bulk[city]" value='<%=city %>'>
     </div>
-    
+
     <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
     <input type="submit" class="btn btn-default" value="Create">
     </form>
   </div>
   <div class='col-md-4 warning'>
-    <% 
+    <%
       if flash[:errors].present?
          flash[:errors].each do |message|
     %>
@@ -185,7 +185,7 @@
     $("#customer").val(customer);
     console.log(customer)
   });
-  
+
   $(".template1").change(function() {
     template = $("select.template1 option:selected").text();
     $("#template").val(template);

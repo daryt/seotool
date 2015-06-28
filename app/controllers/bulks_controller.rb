@@ -43,12 +43,14 @@ class BulksController < ApplicationController
 
     formattedVal = bulk_params[:template].squish.titleize
     flash[:template] = formattedVal
-    templateCheck = Customer.find(customer).templates.find_or_create_by(name: formattedVal)
-    if templateCheck.errors.present?
-      puts "errors found in temp check"
-      flash[:errors] = templateCheck.errors.full_messages
-    else
-      template = templateCheck.id
+    if customer.present?
+      templateCheck = Customer.find(customer).templates.find_or_create_by(name: formattedVal)
+      if templateCheck.errors.present?
+        puts "errors found in temp check"
+        flash[:errors] = templateCheck.errors.full_messages
+      else
+        template = templateCheck.id
+      end
     end
 
     formattedVal = bulk_params[:industry].squish.titleize
@@ -64,12 +66,14 @@ class BulksController < ApplicationController
 
     formattedVal = bulk_params[:topic].squish.titleize
     flash[:topic] = formattedVal
-    topicCheck = Industry.find(industry).topics.find_or_create_by(name: formattedVal)
-    if topicCheck.errors.present?
-      puts "errors found in topic check"
-      flash[:errors] = topicCheck.errors.full_messages
-    else
-      topic = topicCheck.id
+    if industry.present?
+      topicCheck = Industry.find(industry).topics.find_or_create_by(name: formattedVal)
+      if topicCheck.errors.present?
+        puts "errors found in topic check"
+        flash[:errors] = topicCheck.errors.full_messages
+      else
+        topic = topicCheck.id
+      end
     end
 
     #topic = Topic.create(name: bulk_params[:topic], industry_id: industry)
@@ -172,6 +176,7 @@ class BulksController < ApplicationController
       meta = ''
     end
 
+    puts bulk_params
 
     formattedVal = bulk_params[:state].squish.titleize
     flash[:state] = formattedVal
