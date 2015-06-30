@@ -12,6 +12,8 @@ class BulksController < ApplicationController
   def index
   end
 
+  #testing
+
   def bulk
     @industries = Industry.all
     @customers = Customer.all
