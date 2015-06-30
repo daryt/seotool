@@ -14,7 +14,6 @@ class BulksController < ApplicationController
 
   def bulk
     @industries = Industry.all
-    # @topics = Topic.all
     @customers = Customer.all
     @templates = Template.all
     @cities = City.all
